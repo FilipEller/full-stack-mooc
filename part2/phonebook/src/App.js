@@ -11,7 +11,7 @@ const App = () => {
   ]);
 
   const addPerson = (person) => {
-    setPersons(persons.concat(person))
+    setPersons(persons.concat({ ...person, id: persons.length + 1 }))
   }
 
   return (

@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
+import SearchFilter from './SearchFilter'
 
-const NumberList = ({persons}) => {
-  const [personsShown, setPersonsShown] = useState(persons)
+const NumberList = ({ persons }) => {
+  const [filter, setFilter] = useState('')
 
-  const filterPersons = (filter) => {
-    const filtered = persons.filter(p => p.name.toLowerCase().includes(filter))
-    setPersonsShown(filtered)
-  }
+  const personsShown = persons.filter(p => p.name.toLowerCase().includes(filter))
 
   return (
     <div>
       <h2>Numbers</h2>
-      <div>
-        <label htmlFor="search">Filter shown with</label>
-        <input id="search" type="text" onChange={(e) => filterPersons(e.target.value)}/>
-      </div>
+      <SearchFilter setFilter={setFilter} />
       <ul>
         {personsShown.map(p => <li key={p.id}>{p.name} {p.number}</li>)}
       </ul>
