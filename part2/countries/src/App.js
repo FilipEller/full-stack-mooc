@@ -20,18 +20,13 @@ function App() {
 
   console.log('rendering...')
 
-
-
-
-
-
   return (
     <div>
       <div>
         <label htmlFor="search">Find countries</label>
         <input type="text" id="search" value={query} onChange={(e) => setQuery(e.target.value)} />
       </div>
-      <DisplayCountries countries={countriesShown}/>
+      <DisplayCountries countries={countriesShown} setQuery={setQuery}/>
     </div>
   );
 }
