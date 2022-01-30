@@ -1,39 +1,24 @@
 import React, { useState } from 'react'
+import NewPersonForm from './components/AddNumberForm'
+import NumberList from './components/NumberList.js'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
-  ])
-  const [newName, setNewName] = useState('')
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ]);
 
-  const addPerson = (e) => {
-    e.preventDefault()
-    const newPerson = { name: newName };
-    const nameExists = persons.map(p => p.name).some(n => n === newName)
-    if (nameExists) {
-      alert(`${newName} is already added to the phonebook.`)
-    } else {
-      setPersons(persons.concat(newPerson));
-      setNewName('')
-    }
+  const addPerson = (person) => {
+    setPersons(persons.concat(person))
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          <label>Name:</label>
-          <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} />
-        </div>
-        <div>
-          <button type="submit">Add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {persons.map(p => <li key={p.name}>{p.name}</li>)}
-      </ul>
+      <h1>Phonebook</h1>
+      <NewPersonForm persons={persons} addPerson={addPerson} />
+      <NumberList persons={persons} />
     </div>
   )
 }
