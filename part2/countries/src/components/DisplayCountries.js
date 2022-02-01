@@ -10,7 +10,7 @@ const DisplayCountries = ({ countries, setQuery }) => {
     } else if (countries.length === 1) {
       return <DisplayCountry country={countries[0]} />
     } else {
-      return <p>Nothing</p>
+      return <p>No matches, try something else.</p>
     }
   }
 
