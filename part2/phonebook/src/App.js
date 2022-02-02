@@ -8,6 +8,7 @@ import './index.css'
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [message, setMessage] = useState('');
+  const [success, setSuccess] = useState(false)
 
   useEffect(() => {
     personService
@@ -17,8 +18,9 @@ const App = () => {
       })
   }, [])
 
-  const displayNotification = (newMessage) => {
+  const displayNotification = (newMessage, success) => {
     setMessage(newMessage);
+    setSuccess(success)
     setTimeout(() => {
       setMessage('')
     }, 3000)
@@ -31,7 +33,7 @@ const App = () => {
       .then(res => {
         const person = res.data
         setPersons(persons.concat(person))
-        displayNotification(`Added ${person.name}`)
+        displayNotification(`Added ${person.name}.`, true)
       })
   }
 
@@ -40,7 +42,11 @@ const App = () => {
       .update(person, person.id)
       .then(res => {
         setPersons(persons.map(p => p.id !== person.id ? p : res.data))
-        displayNotification(`Updated ${person.name}`)
+        displayNotification(`Updated ${person.name}.`, true)
+      })
+      .catch(error => {
+        setPersons(persons.filter(p => p.id !== person.id))
+        displayNotification(`${person.name} was already removed.`, false)
       })
   }
 
@@ -55,7 +61,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={message}/>
+      <Notification message={message} success={success} />
       <NewPersonForm persons={persons} createPerson={createPerson} updatePerson={updatePerson} />
       <NumberList persons={persons} deletePerson={deletePerson} />
     </div>
