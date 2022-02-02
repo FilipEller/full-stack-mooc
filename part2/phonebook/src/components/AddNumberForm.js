@@ -10,13 +10,13 @@ const AddNumberForm = ({ persons, addPerson }) => {
     const nameExists = persons.map(p => p.name).some(n => n === newName)
     const numberExists = persons.map(p => p.number).some(n => n === newNumber)
     if (nameExists) {
-      alert(`${newName} is already added to the phonebook.`)
+      alert(`${newName} is already added to the phonebook.`);
     } else if (numberExists) {
-      alert(`${newNumber} is already added to the phonebook.`)
+      alert(`${newNumber} is already added to the phonebook.`);
     } else {
       addPerson(newPerson);
-      setNewName('')
-      setNewNumber('')
+      setNewName('');
+      setNewNumber('');
     }
   }
 

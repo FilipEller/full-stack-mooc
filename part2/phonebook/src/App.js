@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import NewPersonForm from './components/AddNumberForm'
 import NumberList from './components/NumberList.js'
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]);
 
-  useEffect(() =>
-    axios
-      .get('http://localhost:3001/persons')
+  useEffect(() => {
+    personService
+      .readAll()
       .then(res => {
         setPersons(res.data)
       })
-    , [])
+  }, [])
 
   const addPerson = (person) => {
-    setPersons(persons.concat({ ...person, id: persons.length + 1 }))
+    personService
+      .create(person)
+      .then(res => {
+        setPersons(persons.concat(res.data))
+      })
   }
 
   return (
