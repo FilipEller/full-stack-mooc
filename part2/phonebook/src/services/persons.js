@@ -9,4 +9,12 @@ const readAll = () => {
   return axios.get(baseURL)
 }
 
-export default { create, readAll }
+const update = (person) => {
+  return axios.put(`${baseURL}/${person.id}`, person)
+}
+
+const deleteById = (id) => {
+  return axios.delete(`${baseURL}/${id}`)
+}
+
+export default { create, readAll, update, deleteById }

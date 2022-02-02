@@ -14,7 +14,8 @@ const App = () => {
       })
   }, [])
 
-  const addPerson = (person) => {
+
+  const createPerson = (person) => {
     personService
       .create(person)
       .then(res => {
@@ -22,11 +23,27 @@ const App = () => {
       })
   }
 
+  const updatePerson = (person) => {
+    personService
+      .update(person, person.id)
+      .then(res => {
+        setPersons(persons.map(p => p.id !== person.id ? p : res.data))
+      })
+  }
+
+  const deletePerson = (person) => {
+    personService
+      .deleteById(person.id)
+      .then(() => {
+        setPersons(persons.filter(p => p.id !== person.id))
+      })
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
-      <NewPersonForm persons={persons} addPerson={addPerson} />
-      <NumberList persons={persons} />
+      <NewPersonForm persons={persons} addPerson={createPerson} updatePerson={updatePerson} />
+      <NumberList persons={persons} deletePerson={deletePerson} />
     </div>
   )
 }
