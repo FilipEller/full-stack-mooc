@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "build:ui": "rm -rf build && cd ../../part2/phonebook && npm run build && cp -r build ../../part3/phonebook-backend",
     "deploy": "cd ../../ && git subtree push --prefix part3/phonebook-backend heroku-phonebook master || true",
-    "log-heroku": "cd ../../ && heroku logs --app=protected-river-17782 -t",
+    "deploy:full": "npm run build:ui && git add . && git commit -m deploy && git push && npm run deploy",
+    "logs:prod": "cd ../../ && heroku logs --app=protected-river-17782 --tail",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
