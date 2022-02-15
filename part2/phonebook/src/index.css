@@ -1,0 +1,15 @@
+.notification {
+  border: solid 3px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.notification.success {
+  border-color: green;
+  background-color: lightgreen;
+}
+
+.notification.danger {
+  border-color: red;
+  background-color: lightcoral;
+}
