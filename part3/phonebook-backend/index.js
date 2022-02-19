@@ -80,27 +80,38 @@ app.post('/api/persons', async (req, res) => {
   res.json(data)
 });
 
-app.get('/api/persons/:id', async (req, res) => {
-  const person = persons.find(p => p.id === Number(req.params.id));
-  if (person) {
-    res.send(person);
-  } else {
-    res.status(404).send({ error: `no person with id ${req.params.id}` })
-  }
+app.get('/api/persons/:id', (req, res, next) => {
+  Person.findById(req.params.id)
+    .then(person => {
+      if (person) {
+        res.json(person)
+      } else {
+        res.status(404).json({
+          error: `no person with id ${req.params.id}`
+        })
+      }
+    })
+    .catch(error => next(error));
 });
 
-app.delete('/api/persons/:id', async (req, res) => {
-  await Person.findByIdAndRemove(req.params.id)
-    .catch(error => {
-      console.log(error.message)
-    });
-  // const id = Number(req.params.id);
-  // persons = persons.filter(p => p.id !== id);
-  res.status(204).end()
+app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then(data => {
+      res.status(204).end()
+    })
+    .catch(error => next(error));
 });
 
 app.use((req, res) => {
   res.status(404).send({
     error: 'unknown endpoint'
   })
+})
+
+app.use((error, req, res, next) => {
+  console.log(error.message);
+  if (error.name == 'CastError') {
+    return res.status(400).json({ error: 'malformatted id' })
+  }
+  res.status(500).end()
 })
