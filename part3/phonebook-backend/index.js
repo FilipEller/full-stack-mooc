@@ -41,17 +41,20 @@ let persons = [
   }
 ]
 
-app.get('/info', (req, res) => {
+app.get('/info', async (req, res) => {
+  const persons = await Person.find({});
   const numPeople = persons.length
   const date = new Date()
-  res.send(`<div>The phonebook has info about ${numPeople} people<div><div>${date}<di>`)
+  res.send(`<h1>Phonebook</h1><div>The phonebook has info about ${numPeople} people<div><div>${date}<di>`)
 });
 
+// READ all Persons
 app.get('/api/persons', async (req, res) => {
-  const data = await Person.find({});
-  res.json(data);
+  const persons = await Person.find({});
+  res.json(persons);
 });
 
+// CREATE Person
 app.post('/api/persons', async (req, res) => {
   const { name, number } = req.body;
   // const generateID = () => Math.floor(Math.random() * 10000000) + 1;
@@ -80,6 +83,7 @@ app.post('/api/persons', async (req, res) => {
   res.json(data)
 });
 
+// READ Person
 app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
     .then(person => {
@@ -94,6 +98,7 @@ app.get('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error));
 });
 
+// DELETE Person
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
     .then(data => {
@@ -102,12 +107,25 @@ app.delete('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error));
 });
 
+app.put('/api/persons/:id', (req, res, next) => {
+  const { name, number } = req.body;
+  const newPerson = { name, number };
+
+  Person.findByIdAndUpdate(req.params.id, newPerson, { new: true })
+    .then(updated => {
+      res.json(updated);
+    })
+    .catch(error => next(error));
+});
+
+// 404
 app.use((req, res) => {
   res.status(404).send({
     error: 'unknown endpoint'
   })
 })
 
+// ERRORS
 app.use((error, req, res, next) => {
   console.log(error.message);
   if (error.name == 'CastError') {
