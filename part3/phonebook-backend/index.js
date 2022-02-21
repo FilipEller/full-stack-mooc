@@ -18,29 +18,6 @@ app.use(express.static('build'));
 app.use(express.json());
 app.use(cors());
 
-let persons = [
-  {
-    "id": 1,
-    "name": "Arto Hellas",
-    "number": "040-123456"
-  },
-  {
-    "id": 2,
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523"
-  },
-  {
-    "id": 3,
-    "name": "Dan Abramov",
-    "number": "12-43-234345"
-  },
-  {
-    "id": 4,
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122"
-  }
-]
-
 app.get('/info', async (req, res) => {
   const persons = await Person.find({});
   const numPeople = persons.length
@@ -55,11 +32,11 @@ app.get('/api/persons', async (req, res) => {
 });
 
 // CREATE Person
-app.post('/api/persons', async (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const { name, number } = req.body;
   // const generateID = () => Math.floor(Math.random() * 10000000) + 1;
 
-  if (!name) {
+  /* if (!name) {
     return res.status(400).send({
       error: 'name missing'
     })
@@ -71,16 +48,19 @@ app.post('/api/persons', async (req, res) => {
     return res.status(400).send({
       error: 'name must be unique'
     })
-  }
+  }*/
 
-  const newPerson = new Person({
-    // id: generateID(),
-    name: name,
-    number: number,
-  })
+  const newPerson = new Person({ name, number })
 
-  const data = await newPerson.save();
-  res.json(data)
+  newPerson.save()
+    .then(data => {
+      res.json(data)
+    })
+    .catch(err => {
+      console.log('opppsiie not saved')
+      next(err);
+    })
+
 });
 
 // READ Person
@@ -95,7 +75,7 @@ app.get('/api/persons/:id', (req, res, next) => {
         })
       }
     })
-    .catch(error => next(error));
+    .catch(err => next(err));
 });
 
 // DELETE Person
@@ -104,18 +84,20 @@ app.delete('/api/persons/:id', (req, res, next) => {
     .then(data => {
       res.status(204).end()
     })
-    .catch(error => next(error));
+    .catch(err => next(err));
 });
 
 app.put('/api/persons/:id', (req, res, next) => {
   const { name, number } = req.body;
-  const newPerson = { name, number };
 
-  Person.findByIdAndUpdate(req.params.id, newPerson, { new: true })
+  Person.findByIdAndUpdate(req.params.id,
+    { name, number },
+    { new: true, runValidators: true, context: 'query' },
+  )
     .then(updated => {
       res.json(updated);
     })
-    .catch(error => next(error));
+    .catch(err => next(err));
 });
 
 // 404
@@ -126,10 +108,13 @@ app.use((req, res) => {
 })
 
 // ERRORS
-app.use((error, req, res, next) => {
-  console.log(error.message);
-  if (error.name == 'CastError') {
+app.use((err, req, res, next) => {
+  console.log(err.message);
+  if (err.name === 'CastError') {
     return res.status(400).json({ error: 'malformatted id' })
+  } else if (err.name === 'ValidationError') {
+    return res.status(400).json({ error: err.message });
   }
+
   res.status(500).end()
 })

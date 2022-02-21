@@ -35,6 +35,9 @@ const App = () => {
         setPersons(persons.concat(person))
         displayNotification(`Added ${person.name}.`, true)
       })
+      .catch(error => {
+        displayNotification(`Could not add ${person.name}: ${error.message}.`, false)
+      })
   }
 
   const updatePerson = (person) => {
