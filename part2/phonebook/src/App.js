@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import NewPersonForm from './components/AddNumberForm'
+import AddNumberForm from './components/AddNumberForm'
 import NumberList from './components/NumberList'
 import Notification from './components/Notification'
 import personService from './services/persons'
@@ -27,16 +27,19 @@ const App = () => {
   }
 
 
-  const createPerson = (person) => {
+  const createPerson = ({name, number}) => {
     personService
-      .create(person)
+      .create({name, number})
       .then(res => {
         const person = res.data
         setPersons(persons.concat(person))
-        displayNotification(`Added ${person.name}.`, true)
+        displayNotification(`Added ${name}.`, true)
       })
       .catch(error => {
-        displayNotification(`Could not add ${person.name}: ${error.message}.`, false)
+        console.log(error)
+        console.log(error.response)
+        console.log(error.response.data)
+        displayNotification(`Could not add ${name}: ${error.response.data.error}.`, false)
       })
   }
 
@@ -65,7 +68,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <Notification message={message} success={success} />
-      <NewPersonForm persons={persons} createPerson={createPerson} updatePerson={updatePerson} />
+      <AddNumberForm persons={persons} createPerson={createPerson} updatePerson={updatePerson} />
       <NumberList persons={persons} deletePerson={deletePerson} />
     </div>
   )

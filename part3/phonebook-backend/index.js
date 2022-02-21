@@ -57,7 +57,6 @@ app.post('/api/persons', (req, res, next) => {
       res.json(data)
     })
     .catch(err => {
-      console.log('opppsiie not saved')
       next(err);
     })
 
