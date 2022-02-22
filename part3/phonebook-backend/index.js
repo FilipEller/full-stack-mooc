@@ -35,21 +35,6 @@ app.get('/api/persons', async (req, res) => {
 // CREATE Person
 app.post('/api/persons', (req, res, next) => {
   const { name, number } = req.body;
-  // const generateID = () => Math.floor(Math.random() * 10000000) + 1;
-
-  /* if (!name) {
-    return res.status(400).send({
-      error: 'name missing'
-    })
-  } else if (!number) {
-    return res.status(400).send({
-      error: 'number missing'
-    })
-  } else if (persons.some(p => p.name === name)) {
-    return res.status(400).send({
-      error: 'name must be unique'
-    })
-  }*/
 
   const newPerson = new Person({ name, number })
 
