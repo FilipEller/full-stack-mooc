@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const db = require('./database');
 const Person = require('./models/person');
+const ExistsError = require('./errors/ExistsError')
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
@@ -52,13 +53,20 @@ app.post('/api/persons', (req, res, next) => {
 
   const newPerson = new Person({ name, number })
 
-  newPerson.save()
-    .then(data => {
-      res.json(data)
-    })
-    .catch(err => {
-      next(err);
-    })
+  Person.find({ name }, (err, data) => {
+    if (!data.length) {
+      newPerson.save()
+        .then(data => {
+          res.json(data)
+        })
+        .catch(err => {
+          next(err);
+        })
+    } else {
+      next(new ExistsError(`${name} already exists.`, 400));
+    }
+  });
+
 
 });
 
@@ -113,6 +121,8 @@ app.use((err, req, res, next) => {
     return res.status(400).json({ error: 'malformatted id' })
   } else if (err.name === 'ValidationError') {
     return res.status(400).json({ error: err.message });
+  } else if (err.name = 'ExistsError') {
+    return res.status(err.status).json({ error: err.message });
   }
 
   res.status(500).end()
