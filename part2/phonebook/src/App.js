@@ -36,7 +36,7 @@ const App = () => {
         displayNotification(`Added ${name}.`, true)
       })
       .catch(error => {
-        displayNotification(`Could not add ${name}: ${error.response.data.error}.`, false)
+        displayNotification(`Could not add ${name}: ${error.response.data.error}`, false)
       })
   }
 
