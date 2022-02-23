@@ -36,9 +36,6 @@ const App = () => {
         displayNotification(`Added ${name}.`, true)
       })
       .catch(error => {
-        console.log(error)
-        console.log(error.response)
-        console.log(error.response.data)
         displayNotification(`Could not add ${name}: ${error.response.data.error}.`, false)
       })
   }

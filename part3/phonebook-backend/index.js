@@ -72,7 +72,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 // DELETE Person
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(() => {
+    .then((data) => {
       res.status(204).end();
     })
     .catch((err) => next(err));
@@ -86,7 +86,8 @@ app.put('/api/persons/:id', (req, res, next) => {
     { name, number },
     { new: true, runValidators: true, context: 'query' },
   )
-    .then((updated) => {
+    // eslint-disable-next-line 
+    .then(updated => {
       res.json(updated);
     })
     .catch((err) => next(err));
@@ -100,7 +101,7 @@ app.use((req, res) => {
 });
 
 // ERRORS
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   console.log(err.message);
   if (err.name === 'CastError') {
     return res.status(400).json({ error: 'malformatted id' });
