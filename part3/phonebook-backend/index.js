@@ -13,7 +13,7 @@ app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
 
-morgan.token('body', (req) => (req.method === 'POST' ? JSON.stringify(req.body) : ''));
+morgan.token('body', req => (req.method === 'POST' ? JSON.stringify(req.body) : ''));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 app.use(express.static('build'));
@@ -42,10 +42,10 @@ app.post('/api/persons', (req, res, next) => {
   Person.find({ name }, (err, previous) => {
     if (!previous.length) {
       newPerson.save()
-        .then((created) => {
+        .then(created => {
           res.json(created);
         })
-        .catch((saveErr) => {
+        .catch(saveErr => {
           next(saveErr);
         });
     } else {
@@ -57,7 +57,7 @@ app.post('/api/persons', (req, res, next) => {
 // READ Person
 app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
-    .then((person) => {
+    .then(person => {
       if (person) {
         res.json(person);
       } else {
@@ -66,16 +66,16 @@ app.get('/api/persons/:id', (req, res, next) => {
         });
       }
     })
-    .catch((err) => next(err));
+    .catch(err => next(err));
 });
 
 // DELETE Person
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then((data) => {
+    .then(data => {
       res.status(204).end();
     })
-    .catch((err) => next(err));
+    .catch(err => next(err));
 });
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -86,11 +86,10 @@ app.put('/api/persons/:id', (req, res, next) => {
     { name, number },
     { new: true, runValidators: true, context: 'query' },
   )
-    // eslint-disable-next-line 
     .then(updated => {
       res.json(updated);
     })
-    .catch((err) => next(err));
+    .catch(err => next(err));
 });
 
 // 404

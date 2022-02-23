@@ -13,6 +13,8 @@ module.exports = {
   rules: {
     'linebreak-style': 0,
     'no-console': 0,
+    'no-unused-vars': 0,
+    'arrow-parens': 0,
   },
   ignorePatterns: [
     'build',
