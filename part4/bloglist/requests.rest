@@ -1,0 +1,13 @@
+###
+GET http://localhost:3003/api/blogs
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Top 10 people",
+  "author": "Joe Johnson",
+  "url": "https://www.economist.com/",
+  "likes": "193"
+}
