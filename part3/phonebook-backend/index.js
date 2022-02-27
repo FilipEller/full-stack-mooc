@@ -8,7 +8,7 @@ require('./database');
 const Person = require('./models/person');
 const ExistsError = require('./errors/ExistsError');
 
-const { PORT } = process.env;
+const { PORT } = process.env || 3001;
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });

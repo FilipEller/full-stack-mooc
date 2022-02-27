@@ -1,5 +1,6 @@
 import axios from 'axios'
-const baseURL = '/api/persons'
+const API_PORT = process.env.REACT_APP_API_PORT;
+const baseURL = API_PORT ? `http://localhost:${API_PORT}/api/persons` : '/api/persons';
 
 const create = (person) => {
   return axios.post(baseURL, person)
