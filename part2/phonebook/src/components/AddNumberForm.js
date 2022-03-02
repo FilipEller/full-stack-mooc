@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { TextInput, Center, Button, createStyles } from '@mantine/core'
 
 const AddNumberForm = ({ persons, createPerson, updatePerson }) => {
   const [newName, setNewName] = useState('')
@@ -26,20 +27,38 @@ const AddNumberForm = ({ persons, createPerson, updatePerson }) => {
     }
   }
 
+  const useStyles = createStyles((theme, _params, getRef) => {
+    return {
+      form: {
+
+      },
+    }
+  })
+
+  const { classes } = useStyles();
+
   return (
-    <div>
-      <h2>Add number</h2>
+    <div className={classes.form}>
+      <Center>
+        <h2>Add number</h2>
+      </Center>
       <form onSubmit={onSubmit}>
         <div>
           <label htmlFor="name">Name:</label>
-          <input type="text" id="name" value={newName} onChange={(e) => setNewName(e.target.value)} />
+          <TextInput type="text" id="name" value={newName} onChange={(e) => setNewName(e.target.value)} />
         </div>
         <div>
           <label htmlFor="number">Number:</label>
           <input type="text" id="number" value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
         </div>
         <div>
-          <button type="submit">Add</button>
+          <Button
+            variant="gradient"
+            gradient={{ from: 'grape', to: 'cyan' }}
+            radius="xl"
+            type="submit">
+            Add
+          </Button>
         </div>
       </form>
     </div>

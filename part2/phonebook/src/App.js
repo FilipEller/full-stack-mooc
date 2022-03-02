@@ -4,6 +4,9 @@ import NumberList from './components/NumberList'
 import Notification from './components/Notification'
 import personService from './services/persons'
 import './index.css'
+import { Paper, Center, createStyles } from '@mantine/core'
+
+
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -27,9 +30,9 @@ const App = () => {
   }
 
 
-  const createPerson = ({name, number}) => {
+  const createPerson = ({ name, number }) => {
     personService
-      .create({name, number})
+      .create({ name, number })
       .then(res => {
         const person = res.data
         setPersons(persons.concat(person))
@@ -61,13 +64,30 @@ const App = () => {
       })
   }
 
+  const useStyles = createStyles((theme, _params, getRef) => {
+    return {
+      container: {
+        backgroundColor: theme.colors.blue[1],
+        maxWidth: "470px",
+        margin: "30px auto",
+        minHeight: "500px",
+      }
+    }
+  })
+
+  const { classes } = useStyles();
+
   return (
-    <div>
-      <h1>Phonebook</h1>
+    <Paper
+      padding="xl" shadow="xl" radius="md"
+      className={classes.container}>
+      <Center>
+        <h1>Phonebook</h1>
+      </Center>
       <Notification message={message} success={success} />
       <AddNumberForm persons={persons} createPerson={createPerson} updatePerson={updatePerson} />
       <NumberList persons={persons} deletePerson={deletePerson} />
-    </div>
+    </Paper>
   )
 }
 
