@@ -6,7 +6,7 @@ const blogs = [...Array(5).keys()].map(i => new Blog({
   title: `Title${i}`,
   author: `Author${i % 4}`, // 0, 1, 2, 3, 0
   url: `Url${i}`,
-  likes: i,
+  likes: i, // 0, 1, 2, 3, 4
   __v: 0,
 }));
 
@@ -68,5 +68,25 @@ describe('author with most blogs', () => {
 
   test('of empty list is null', () => {
     expect(listHelper.mostBlogs([])).toEqual(null);
+  });
+});
+
+describe('author with most likes', () => {
+  test('of a list of one blog is its author in correct form', () => {
+    expect(listHelper.mostLikes([blogs[3]])).toEqual({
+      author: 'Author3',
+      likes: 3,
+    });
+  });
+
+  test('of a list of blogs is calculated correctly', () => {
+    expect(listHelper.mostLikes(blogs)).toEqual({
+      author: 'Author0',
+      likes: 4,
+    });
+  });
+
+  test('of empty list is null', () => {
+    expect(listHelper.mostLikes([])).toEqual(null);
   });
 });
