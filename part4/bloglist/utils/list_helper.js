@@ -31,12 +31,17 @@ const mostBlogs = blogs => {
     }
   });
 
-  // find author with most blogs. Not implemented.
-  authors.keys().reduce((most, author) => (authors[author] > authors[most]
-    ? author
-    : most));
+  const authorWithMostBlogs = Object.keys(authors)
+    .reduce((most, author) => (
+      authors[author] > authors[most]
+        ? author
+        : most
+    ));
 
-  return null;
+  return {
+    author: authorWithMostBlogs,
+    blogs: authors[authorWithMostBlogs],
+  };
 };
 
 module.exports = {
