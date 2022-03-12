@@ -20,13 +20,40 @@ describe('with some initially saved blogs', () => {
 
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs');
-    expect(response.body).toHaveLength(helper.initialBlogs.length);
+    expect(response.body)
+      .toHaveLength(helper.initialBlogs.length);
   });
 
   test('blogs have a property named id', async () => {
     const response = await api.get('/api/blogs');
     response.body
       .forEach(blog => expect(blog.id).toBeDefined());
+  });
+});
+
+describe('addition of a new blog', () => {
+  test('succeeds with valid data', async () => {
+    const newBlog = {
+      title: 'My Statement on Ukraine',
+      author: 'Barack Obama',
+      url: 'https://barackobama.medium.com/my-statement-on-ukraine-dc18ef76ad88',
+      likes: 16,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const response = await api.get('/api/blogs');
+    const blogs = response.body;
+
+    expect(blogs)
+      .toHaveLength(helper.initialBlogs.length + 1);
+    expect(blogs
+      .map(({ title, author, url, likes }) => ({ title, author, url, likes }))) // eslint-disable-line
+      .toContainEqual(newBlog);
   });
 });
 

@@ -42,7 +42,6 @@ const initialBlogs = [
 
 const initializeDB = async () => {
   await Blog.deleteMany({});
-  console.log('initializing database');
   await Promise.all(initialBlogs
     .map(blog => new Blog(blog))
     .map(blog => blog.save()));

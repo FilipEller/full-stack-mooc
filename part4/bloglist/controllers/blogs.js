@@ -1,19 +1,19 @@
 const router = require('express').Router();
 const Blog = require('../models/blog');
 
-router.get('/', async (request, response, next) => {
+router.get('/', async (req, res, next) => {
   const blogs = await Blog.find({});
-  response.json(blogs);
+  res.json(blogs);
 });
 
-router.post('/', (request, response, next) => {
-  const blog = new Blog(request.body);
+router.post('/', async (req, res, next) => {
+  const { title, author, url, likes } = req.body; // eslint-disable-line
+  const blog = new Blog({
+    title, author, url, likes,
+  });
 
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result);
-    });
+  const result = await blog.save();
+  res.status(201).json(result);
 });
 
 module.exports = router;
