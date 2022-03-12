@@ -11,7 +11,7 @@ beforeEach(async () => {
 });
 
 describe('with some initially saved blogs', () => {
-  test('blogs are returned as json', async () => {
+  test('blogs are returned as JSON', async () => {
     await api
       .get('/api/blogs')
       .expect(200)
@@ -20,8 +20,13 @@ describe('with some initially saved blogs', () => {
 
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs');
-
     expect(response.body).toHaveLength(helper.initialBlogs.length);
+  });
+
+  test('blogs have a property named id', async () => {
+    const response = await api.get('/api/blogs');
+    response.body
+      .forEach(blog => expect(blog.id).toBeDefined());
   });
 });
 
