@@ -55,6 +55,29 @@ describe('addition of a new blog', () => {
       .map(({ title, author, url, likes }) => ({ title, author, url, likes }))) // eslint-disable-line
       .toContainEqual(newBlog);
   });
+
+  test('succeeds with missing likes interpreted as 0 likes', async () => {
+    const newBlog = {
+      title: 'My Statement on Ukraine',
+      author: 'Barack Obama',
+      url: 'https://barackobama.medium.com/my-statement-on-ukraine-dc18ef76ad88',
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const response = await api.get('/api/blogs');
+    const blogs = response.body;
+
+    expect(blogs)
+      .toHaveLength(helper.initialBlogs.length + 1);
+    expect(blogs
+      .map(({ title, author, url, likes }) => ({ title, author, url, likes }))) // eslint-disable-line
+      .toContainEqual({ ...newBlog, likes: 0 });
+  });
 });
 
 afterAll(() => {
