@@ -52,7 +52,9 @@ describe('addition of a new blog', () => {
     expect(blogs)
       .toHaveLength(helper.initialBlogs.length + 1);
     expect(blogs
-      .map(({ title, author, url, likes }) => ({ title, author, url, likes }))) // eslint-disable-line
+      .map(({ title, author, url, likes }) => ({
+        title, author, url, likes,
+      })))
       .toContainEqual(newBlog);
   });
 
@@ -75,11 +77,13 @@ describe('addition of a new blog', () => {
     expect(blogs)
       .toHaveLength(helper.initialBlogs.length + 1);
     expect(blogs
-      .map(({ title, author, url, likes }) => ({ title, author, url, likes }))) // eslint-disable-line
+      .map(({ title, author, url, likes }) => ({
+        title, author, url, likes,
+      })))
       .toContainEqual({ ...newBlog, likes: 0 });
   });
 
-  test('fails if title or url is missing', async () => {
+  test('fails with status code 400 if title or URL is missing', async () => {
     const blogWithoutTitle = {
       author: 'Barack Obama',
       url: 'https://barackobama.medium.com/my-statement-on-ukraine-dc18ef76ad88',
@@ -101,6 +105,24 @@ describe('addition of a new blog', () => {
       .post('/api/blogs')
       .send(blogWithoutURL)
       .expect(400);
+  });
+});
+
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsBefore = await helper.blogsInDB();
+    const blogToDelete = blogsBefore[0];
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204);
+
+    const blogsAfter = await helper.blogsInDB();
+    expect(blogsAfter)
+      .toHaveLength(helper.initialBlogs.length - 1);
+    expect(blogsAfter
+      .map(blog => blog.id))
+      .not.toContain(blogToDelete.id);
   });
 });
 
