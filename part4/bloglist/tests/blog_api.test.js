@@ -78,6 +78,30 @@ describe('addition of a new blog', () => {
       .map(({ title, author, url, likes }) => ({ title, author, url, likes }))) // eslint-disable-line
       .toContainEqual({ ...newBlog, likes: 0 });
   });
+
+  test('fails if title or url is missing', async () => {
+    const blogWithoutTitle = {
+      author: 'Barack Obama',
+      url: 'https://barackobama.medium.com/my-statement-on-ukraine-dc18ef76ad88',
+      likes: 16,
+    };
+
+    const blogWithoutURL = {
+      title: 'My Statement on Ukraine',
+      author: 'Barack Obama',
+      likes: 16,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(blogWithoutTitle)
+      .expect(400);
+
+    await api
+      .post('/api/blogs')
+      .send(blogWithoutURL)
+      .expect(400);
+  });
 });
 
 afterAll(() => {
