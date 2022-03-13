@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SearchFilter from './SearchFilter'
-import { Center, Paper, Button, createStyles } from '@mantine/core';
+import { Center, Paper, Button, createStyles, Title, Text } from '@mantine/core';
 
 const NumberList = ({ persons, deletePerson }) => {
   const [filter, setFilter] = useState('')
@@ -32,24 +32,24 @@ const NumberList = ({ persons, deletePerson }) => {
 
   return (
     <div>
-      <Center>
-        <h2>Numbers</h2>
-      </Center>
+      <Title order={2} align="center" my="sm">Numbers</Title>
       <SearchFilter setFilter={setFilter} />
       <div>
         {personsShown.map(p => (
           <Paper key={p.id}
             padding="md" shadow="md" radius="md"
             className={classes.person}>
-
             <Center>
               <div className={classes.info}>
-                {p.name} {p.number}
+                <Text>
+                  {p.name} {p.number}
+                </Text>
               </div>
             </Center>
             <Button
               variant="gradient"
-              gradient={{ from: 'grape', to: 'cyan' }}
+              gradient={{ from: 'violet', to: 'cyan' }}
+              size="sm"
               radius="xl"
               onClick={() => onDelete(p)}>
               Delete

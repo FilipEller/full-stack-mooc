@@ -1,11 +1,17 @@
 import React from 'react';
+import { TextInput } from '@mantine/core'
 
 const SearchFilter = ({ setFilter }) => {
   return (
-    <div>
-      <label htmlFor="search">Filter shown numbers with</label>
-      <input id="search" type="text" onChange={(e) => setFilter(e.target.value)} />
-    </div>
+    <TextInput
+      type="text"
+      label="Search for a person"
+      id="search"
+      size="md"
+      onChange={(e) => setFilter(e.target.value.toLowerCase())}
+      autoComplete="off"
+      my="md"
+    />
   );
 };
 

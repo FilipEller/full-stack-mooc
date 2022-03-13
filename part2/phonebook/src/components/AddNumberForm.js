@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextInput, Center, Button, createStyles } from '@mantine/core'
+import { TextInput, Center, Button, Grid, Title } from '@mantine/core'
 
 const AddNumberForm = ({ persons, createPerson, updatePerson }) => {
   const [newName, setNewName] = useState('')
@@ -27,39 +27,50 @@ const AddNumberForm = ({ persons, createPerson, updatePerson }) => {
     }
   }
 
-  const useStyles = createStyles((theme, _params, getRef) => {
-    return {
-      form: {
-
-      },
-    }
-  })
-
-  const { classes } = useStyles();
 
   return (
-    <div className={classes.form}>
-      <Center>
-        <h2>Add number</h2>
-      </Center>
+    <div>
+      <Title order={2} align="center" my="sm">Add a number</Title>
       <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <TextInput type="text" id="name" value={newName} onChange={(e) => setNewName(e.target.value)} />
-        </div>
-        <div>
-          <label htmlFor="number">Number:</label>
-          <input type="text" id="number" value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
-        </div>
-        <div>
-          <Button
-            variant="gradient"
-            gradient={{ from: 'grape', to: 'cyan' }}
-            radius="xl"
-            type="submit">
-            Add
-          </Button>
-        </div>
+        <TextInput
+          type="text"
+          label="Full name"
+          placeholder="Your name"
+          required
+          id="name"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          autoComplete="off"
+          size="md"
+          my="xs"
+        />
+        <Grid justify="space-between" align="flex-end" my="xs">
+          <Grid.Col span={9}>
+            <TextInput
+              type="text"
+              label="Phone number"
+              placeholder="123-4567890"
+              required
+              id="number"
+              value={newNumber}
+              onChange={(e) => setNewNumber(e.target.value)}
+              autoComplete="off"
+              size="md"
+            />
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Center>
+              <Button
+                variant="gradient"
+                gradient={{ from: 'violet', to: 'cyan'}}
+                size="sm"
+                radius="xl"
+                type="submit">
+                Add
+              </Button>
+            </Center>
+          </Grid.Col>
+        </Grid>
       </form>
     </div>
   );
