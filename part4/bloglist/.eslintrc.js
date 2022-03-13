@@ -6,7 +6,7 @@ module.exports = {
     jest: true,
   },
   extends: [
-    'airbnb-base', // https://github.com/airbnb/javascript/blob/master/packages/eslint-config-airbnb-base/rules/style.js
+    'airbnb-base', // https://github.com/airbnb/javascript/blob/master/packages/eslint-config-airbnb-base/rules
   ],
   parserOptions: {
     ecmaVersion: 'latest',
@@ -14,7 +14,7 @@ module.exports = {
   rules: {
     'linebreak-style': 0,
     'no-console': 0,
-    'no-unused-vars': 0,
+    'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: true }],
     'arrow-parens': 0,
     'no-plusplus': 0,
     'object-curly-newline': ['error', {

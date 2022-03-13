@@ -1,21 +1,21 @@
 const router = require('express').Router();
 const Blog = require('../models/blog');
 
+// CREATE
+router.post('/', async (req, res, next) => {
+  const { title, author, url, likes } = req.body;
+  const blogToCreate = new Blog({
+    title, author, url, likes,
+  });
+
+  const result = await blogToCreate.save();
+  res.status(201).json(result);
+});
+
 // READ ALL
 router.get('/', async (req, res, next) => {
   const blogs = await Blog.find({});
   res.json(blogs);
-});
-
-// CREATE
-router.post('/', async (req, res, next) => {
-  const { title, author, url, likes } = req.body;
-  const blog = new Blog({
-    title, author, url, likes,
-  });
-
-  const result = await blog.save();
-  res.status(201).json(result);
 });
 
 // UPDATE
@@ -25,7 +25,8 @@ router.put('/:id', async (req, res, next) => {
     title, author, url, likes,
   };
 
-  const result = await Blog.findByIdAndUpdate(req.params.id, blogToUpdate, { new: true });
+  const result = await Blog
+    .findByIdAndUpdate(req.params.id, blogToUpdate, { new: true });
   res.json(result);
 });
 

@@ -54,4 +54,17 @@ const blogsInDB = async () => {
   return blogsProcessed;
 };
 
-module.exports = { initialBlogs, initializeDB, blogsInDB };
+const nonExistingID = async () => {
+  const blog = new Blog({
+    title: 'temp', author: 'temp', url: 'temp', likes: 0,
+  });
+
+  await blog.save();
+  await blog.remove();
+
+  return blog.toJSON().id;
+};
+
+module.exports = {
+  initialBlogs, initializeDB, blogsInDB, nonExistingID,
+};

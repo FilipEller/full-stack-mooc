@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
-const Blog = require('../models/blog');
 const helper = require('./test_helper');
 
 const api = supertest(app);
@@ -123,6 +122,103 @@ describe('deletion of a blog', () => {
     expect(blogsAfter
       .map(blog => blog.id))
       .not.toContain(blogToDelete.id);
+  });
+
+  test('fails with status code 204 if id is invalid', async () => {
+    const invalidID = await helper.nonExistingID();
+
+    await api
+      .delete(`/api/blogs/${invalidID}`)
+      .expect(204);
+
+    const blogsAfter = await helper.blogsInDB();
+    expect(blogsAfter)
+      .toHaveLength(helper.initialBlogs.length);
+  });
+
+  test('fails with status code 400 if id is malformatted', async () => {
+    await api
+      .delete('/api/blogs/000')
+      .expect(400);
+
+    const response = await api.get('/api/blogs');
+    const blogsAfter = response.body;
+
+    expect(blogsAfter)
+      .toHaveLength(helper.initialBlogs.length);
+  });
+});
+
+describe('updating a blog', () => {
+  test('succeeds with status code 200 if id is valid', async () => {
+    const blogsBefore = await helper.blogsInDB();
+    const blogToUpdate = blogsBefore[0];
+    const modifiedBlog = { ...blogToUpdate, likes: blogToUpdate.likes + 1 };
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(modifiedBlog)
+      .expect(200, modifiedBlog);
+
+    const blogsAfter = await helper.blogsInDB();
+    expect(blogsAfter)
+      .toHaveLength(helper.initialBlogs.length);
+    expect(blogsAfter)
+      .not.toContainEqual(blogToUpdate);
+    expect(blogsAfter)
+      .toContainEqual(modifiedBlog);
+  });
+
+  test('succeeds with status code 200 even if content is missing', async () => {
+    const blogsBefore = await helper.blogsInDB();
+    const blogToUpdate = blogsBefore[0];
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .expect(200, blogToUpdate);
+
+    const blogsAfter = await helper.blogsInDB();
+    expect(blogsAfter)
+      .toHaveLength(helper.initialBlogs.length);
+    expect(blogsAfter)
+      .toContainEqual(blogToUpdate);
+  });
+
+  test('fails with status code 200 if id is invalid', async () => {
+    const blogsBefore = await helper.blogsInDB();
+    const blogToUpdate = blogsBefore[0];
+    const modifiedBlog = { ...blogToUpdate, likes: blogToUpdate.likes + 1 };
+    const invalidID = await helper.nonExistingID();
+
+    await api
+      .put(`/api/blogs/${invalidID}`)
+      .send(modifiedBlog)
+      .expect(200, null);
+
+    const blogsAfter = await helper.blogsInDB();
+    expect(blogsAfter)
+      .toHaveLength(helper.initialBlogs.length);
+    expect(blogsAfter)
+      .not.toContainEqual(modifiedBlog);
+  });
+
+  test('fails with status code 400 if id is malformatted', async () => {
+    const blogsBefore = await helper.blogsInDB();
+    const blogToUpdate = blogsBefore[0];
+    const modifiedBlog = { ...blogToUpdate, likes: blogToUpdate.likes + 1 };
+
+    await api
+      .put('/api/blogs/000')
+      .send(modifiedBlog)
+      .expect(400);
+
+    const response = await api.get('/api/blogs');
+    const blogsAfter = response.body;
+
+    expect(blogsAfter)
+      .toHaveLength(helper.initialBlogs.length);
+    expect(blogsAfter)
+      .not.toContainEqual(modifiedBlog);
   });
 });
 
