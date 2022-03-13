@@ -1,14 +1,17 @@
 const listHelper = require('../utils/list_helper');
 const Blog = require('../models/blog');
 
-const blogs = [...Array(5).keys()].map(i => new Blog({
-  _id: i,
-  title: `Title${i}`,
-  author: `Author${i % 4}`, // 0, 1, 2, 3, 0
-  url: `Url${i}`,
-  likes: i, // 0, 1, 2, 3, 4
-  __v: 0,
-}));
+const blogs = [...Array(5).keys()].map(
+  i =>
+    new Blog({
+      _id: i,
+      title: `Title${i}`,
+      author: `Author${i % 4}`, // 0, 1, 2, 3, 0
+      url: `Url${i}`,
+      likes: i, // 0, 1, 2, 3, 4
+      __v: 0,
+    })
+);
 
 test('dummy returns one', () => {
   const result = listHelper.dummy([]);

@@ -41,22 +41,24 @@ const initialBlogs = [
 
 const initializeDB = async () => {
   await Blog.deleteMany({});
-  await Promise.all(initialBlogs
-    .map(blog => new Blog(blog))
-    .map(blog => blog.save()));
+  await Promise.all(
+    initialBlogs.map(blog => new Blog(blog)).map(blog => blog.save())
+  );
 };
 
 const blogsInDB = async () => {
   const blogs = await Blog.find({});
-  const blogsProcessed = blogs
-    .map(blog => JSON.parse(JSON.stringify(blog)));
+  const blogsProcessed = blogs.map(blog => JSON.parse(JSON.stringify(blog)));
   // JSON.stringify calls, inter alia, blog's toJSON
   return blogsProcessed;
 };
 
 const nonExistingID = async () => {
   const blog = new Blog({
-    title: 'temp', author: 'temp', url: 'temp', likes: 0,
+    title: 'temp',
+    author: 'temp',
+    url: 'temp',
+    likes: 0,
   });
 
   await blog.save();
@@ -66,5 +68,8 @@ const nonExistingID = async () => {
 };
 
 module.exports = {
-  initialBlogs, initializeDB, blogsInDB, nonExistingID,
+  initialBlogs,
+  initializeDB,
+  blogsInDB,
+  nonExistingID,
 };

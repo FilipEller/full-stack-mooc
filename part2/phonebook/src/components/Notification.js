@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Notification = ({message, success}) => {
+const Notification = ({ message, success }) => {
   if (!message) {
     return null;
   }

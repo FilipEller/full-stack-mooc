@@ -1,4 +1,4 @@
-const colors = require('colors');
+const colors = require('colors'); // eslint-disable-line
 
 const success = (...params) => {
   console.log(...params.map(s => s.green));

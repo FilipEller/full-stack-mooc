@@ -5,7 +5,10 @@ const Blog = require('../models/blog');
 router.post('/', async (req, res, next) => {
   const { title, author, url, likes } = req.body;
   const blogToCreate = new Blog({
-    title, author, url, likes,
+    title,
+    author,
+    url,
+    likes,
   });
 
   const result = await blogToCreate.save();
@@ -22,11 +25,15 @@ router.get('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   const { title, author, url, likes } = req.body;
   const blogToUpdate = {
-    title, author, url, likes,
+    title,
+    author,
+    url,
+    likes,
   };
 
-  const result = await Blog
-    .findByIdAndUpdate(req.params.id, blogToUpdate, { new: true });
+  const result = await Blog.findByIdAndUpdate(req.params.id, blogToUpdate, {
+    new: true,
+  });
   res.json(result);
 });
 

@@ -1,14 +1,15 @@
 const dummy = blogs => 1;
 
-const totalLikes = blogs => blogs.reduce((total, blog) => total + blog.likes, 0);
+const totalLikes = blogs =>
+  blogs.reduce((total, blog) => total + blog.likes, 0);
 
 const favoriteBlog = blogs => {
   if (!blogs.length) {
     return null;
   }
-  const favorite = blogs.reduce((fav, blog) => (blog.likes > fav.likes
-    ? blog
-    : fav));
+  const favorite = blogs.reduce((fav, blog) =>
+    blog.likes > fav.likes ? blog : fav
+  );
 
   return {
     title: favorite.title,
@@ -23,7 +24,7 @@ const mostBlogs = blogs => {
   }
 
   const authors = {};
-  blogs.forEach((blog) => {
+  blogs.forEach(blog => {
     if (authors[blog.author]) {
       authors[blog.author]++;
     } else {
@@ -31,12 +32,9 @@ const mostBlogs = blogs => {
     }
   });
 
-  const authorWithMostBlogs = Object.keys(authors)
-    .reduce((most, author) => (
-      authors[author] > authors[most]
-        ? author
-        : most
-    ));
+  const authorWithMostBlogs = Object.keys(authors).reduce((most, author) =>
+    authors[author] > authors[most] ? author : most
+  );
 
   return {
     author: authorWithMostBlogs,
@@ -50,7 +48,7 @@ const mostLikes = blogs => {
   }
 
   const authors = {};
-  blogs.forEach((blog) => {
+  blogs.forEach(blog => {
     if (authors[blog.author]) {
       authors[blog.author] += blog.likes;
     } else {
@@ -58,12 +56,9 @@ const mostLikes = blogs => {
     }
   });
 
-  const authorWithMostLikes = Object.keys(authors)
-    .reduce((most, author) => (
-      authors[author] > authors[most]
-        ? author
-        : most
-    ));
+  const authorWithMostLikes = Object.keys(authors).reduce((most, author) =>
+    authors[author] > authors[most] ? author : most
+  );
 
   return {
     author: authorWithMostLikes,

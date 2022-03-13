@@ -4,11 +4,12 @@ const password = process.argv[2];
 const url = `mongodb+srv://main:${password}@cluster0.ihvk6.mongodb.net/phonebook?retryWrites=true&w=majority`;
 
 console.log('Connecting to database');
-mongoose.connect(url)
+mongoose
+  .connect(url)
   .then(() => {
     console.log('Connected to database');
   })
-  .catch((error) => {
+  .catch(error => {
     console.log('Failed to connect to database:', error.message);
   });
 
@@ -29,7 +30,7 @@ const insert = async (name, number) => {
 const getAll = async () => {
   const persons = await Person.find({});
   console.log('phonebook:');
-  persons.forEach((p) => console.log(p.name, p.number));
+  persons.forEach(p => console.log(p.name, p.number));
   db.close();
 };
 

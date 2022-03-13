@@ -1,44 +1,59 @@
 import React, { useState } from 'react';
-import SearchFilter from './SearchFilter'
-import { Center, Paper, Button, createStyles, Title, Text } from '@mantine/core';
+import SearchFilter from './SearchFilter';
+import {
+  Center,
+  Paper,
+  Button,
+  createStyles,
+  Title,
+  Text,
+} from '@mantine/core';
 
 const NumberList = ({ persons, deletePerson }) => {
-  const [filter, setFilter] = useState('')
+  const [filter, setFilter] = useState('');
 
-  const personsShown = persons.filter(p => p.name.toLowerCase().includes(filter))
+  const personsShown = persons.filter(p =>
+    p.name.toLowerCase().includes(filter)
+  );
 
-  const onDelete = (person) => {
+  const onDelete = person => {
     if (window.confirm(`Do you want to delete ${person.name}?`)) {
-      deletePerson(person)
+      deletePerson(person);
     }
-  }
+  };
 
   const useStyles = createStyles((theme, _params, getRef) => {
     return {
       person: {
         backgroundColor: theme.colors.gray[0],
-        margin: "15px 0",
-        display: "flex",
-        justifyContent: "space-between"
+        margin: '15px 0',
+        display: 'flex',
+        justifyContent: 'space-between',
       },
       info: {
-        margin: "0 10px",
-        fontSize: "1em"
-      }
-    }
-  })
+        margin: '0 10px',
+        fontSize: '1em',
+      },
+    };
+  });
 
   const { classes } = useStyles();
 
   return (
     <div>
-      <Title order={2} align="center" my="sm">Numbers</Title>
+      <Title order={2} align='center' my='sm'>
+        Numbers
+      </Title>
       <SearchFilter setFilter={setFilter} />
       <div>
         {personsShown.map(p => (
-          <Paper key={p.id}
-            padding="md" shadow="md" radius="md"
-            className={classes.person}>
+          <Paper
+            key={p.id}
+            padding='md'
+            shadow='md'
+            radius='md'
+            className={classes.person}
+          >
             <Center>
               <div className={classes.info}>
                 <Text>
@@ -47,19 +62,19 @@ const NumberList = ({ persons, deletePerson }) => {
               </div>
             </Center>
             <Button
-              variant="gradient"
+              variant='gradient'
               gradient={{ from: 'violet', to: 'cyan' }}
-              size="sm"
-              radius="xl"
-              onClick={() => onDelete(p)}>
+              size='sm'
+              radius='xl'
+              onClick={() => onDelete(p)}
+            >
               Delete
             </Button>
-
           </Paper>
         ))}
       </div>
     </div>
-  )
+  );
 };
 
 export default NumberList;

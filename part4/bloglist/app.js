@@ -12,11 +12,12 @@ const middleware = require('./utils/middleware');
 
 app.use(morgan('short'));
 
-mongoose.connect(MONGODB_URI)
+mongoose
+  .connect(MONGODB_URI)
   .then(() => {
     logger.success('Connected to database');
   })
-  .catch((err) => {
+  .catch(err => {
     logger.error('Failed to connect to database:', err.message);
   });
 

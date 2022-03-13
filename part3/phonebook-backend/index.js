@@ -13,8 +13,12 @@ app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
 
-morgan.token('body', req => (req.method === 'POST' ? JSON.stringify(req.body) : ''));
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+morgan.token('body', req =>
+  req.method === 'POST' ? JSON.stringify(req.body) : ''
+);
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms :body')
+);
 
 app.use(express.static('build'));
 app.use(express.json());
@@ -24,7 +28,9 @@ app.get('/info', async (req, res) => {
   const persons = await Person.find({});
   const numPeople = persons.length;
   const date = new Date();
-  res.send(`<h1>Phonebook</h1><div>The phonebook has info about ${numPeople} people<div><div>${date}<di>`);
+  res.send(
+    `<h1>Phonebook</h1><div>The phonebook has info about ${numPeople} people<div><div>${date}<di>`
+  );
 });
 
 // READ all Persons
@@ -41,7 +47,8 @@ app.post('/api/persons', (req, res, next) => {
 
   Person.find({ name }, (err, previous) => {
     if (!previous.length) {
-      newPerson.save()
+      newPerson
+        .save()
         .then(created => {
           res.json(created);
         })
@@ -84,7 +91,7 @@ app.put('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndUpdate(
     req.params.id,
     { name, number },
-    { new: true, runValidators: true, context: 'query' },
+    { new: true, runValidators: true, context: 'query' }
   )
     .then(updated => {
       res.json(updated);
@@ -104,9 +111,11 @@ app.use((err, req, res, next) => {
   console.log(err.message);
   if (err.name === 'CastError') {
     return res.status(400).json({ error: 'malformatted id' });
-  } if (err.name === 'ValidationError') {
+  }
+  if (err.name === 'ValidationError') {
     return res.status(400).json({ error: err.message });
-  } if (err.name === 'ExistsError') {
+  }
+  if (err.name === 'ExistsError') {
     return res.status(err.status).json({ error: err.message });
   }
 
