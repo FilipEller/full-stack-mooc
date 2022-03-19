@@ -1,6 +1,5 @@
 const calculateBmi = (height: number, weight: number): string => {
   const bmi = weight / (height / 100) ** 2;
-  console.log(bmi);
   switch (true) {
     case bmi < 18.5:
       return 'Underweight (thinness)';
