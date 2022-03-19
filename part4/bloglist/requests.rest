@@ -6,14 +6,14 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Top 10 people",
+  "title": "Top 18 people",
   "author": "Joe Johnson",
   "url": "https://www.economist.com/",
   "likes": "193"
 }
 
 ###
-DELETE http://localhost:3003/api/blogs/622cd56f5a39ca8c235eecce
+DELETE http://localhost:3003/api/blogs/62360761a6f76f50b2601124
 
 ###
 PUT http://localhost:3003/api/blogs/622cb479640263f2f0f11906
