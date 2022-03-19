@@ -55,6 +55,7 @@ module.exports = {
     'function-paren-newline': 0,
     'implicit-arrow-linebreak': 0,
     'operator-linebreak': 0,
+    'consistent-return': 0,
   },
   ignorePatterns: [],
 };

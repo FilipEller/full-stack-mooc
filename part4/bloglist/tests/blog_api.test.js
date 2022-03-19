@@ -6,7 +6,7 @@ const helper = require('./test_helper');
 const api = supertest(app);
 
 beforeEach(async () => {
-  await helper.initializeDB();
+  await helper.initializeBlogDB();
 });
 
 describe('with some initially saved blogs', () => {
