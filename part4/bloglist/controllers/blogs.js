@@ -4,20 +4,11 @@ const Blog = require('../models/blog');
 const User = require('../models/user');
 const { SECRET } = require('../utils/config');
 
-const getTokenFrom = req => {
-  const authorization = req.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7);
-  }
-  return null;
-};
-
 // CREATE
 router.post('/', async (req, res, next) => {
   const { title, author, url, likes } = req.body;
 
-  const token = getTokenFrom(req);
-  const decodedToken = jwt.verify(token, SECRET);
+  const decodedToken = jwt.verify(req.token, SECRET);
   if (!decodedToken.id) {
     return res.status(401).json({ error: 'token missing or invalid' });
   }
