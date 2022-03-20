@@ -4,9 +4,10 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImplcnJ5IiwiaWQiOiI2MjM3MGNiMGVjYTNjZmRjYWZjNmExM2MiLCJpYXQiOjE2NDc3NzU4MzF9.TRIv4zzXfEBnE2K8nYml1eRM6dSXAdTe9JFUuHIwIi0
 
 {
-  "title": "Top 18 people",
+  "title": "Top 17 people",
   "author": "Joe Johnson",
   "url": "https://www.economist.com/",
   "likes": "193"
@@ -34,7 +35,25 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "username": "mary",
-  "name": "Mary Poppins",
+  "username": "jerry",
+  "name": "Jerry Poppins",
   "password": "secretword10101"
+}
+
+###
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "jerry",
+  "password": "secretword10101"
+}
+
+###
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "jerry",
+  "password": "wrong"
 }

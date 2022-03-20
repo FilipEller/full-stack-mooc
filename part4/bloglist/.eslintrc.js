@@ -56,6 +56,7 @@ module.exports = {
     'implicit-arrow-linebreak': 0,
     'operator-linebreak': 0,
     'consistent-return': 0,
+    'no-underscore-dangle': 0,
   },
   ignorePatterns: [],
 };

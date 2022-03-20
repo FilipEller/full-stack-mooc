@@ -1,9 +1,9 @@
 const bcrypt = require('bcrypt');
-const usersRouter = require('express').Router();
+const router = require('express').Router();
 const User = require('../models/user');
 
 // CREATE
-usersRouter.post('/', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const { username, name, password } = req.body;
 
   const existingUser = await User.findOne({ username });
@@ -40,9 +40,9 @@ usersRouter.post('/', async (req, res, next) => {
 });
 
 // READ all
-usersRouter.get('/', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   const users = await User.find({}).populate('blogs', { title: 1, url: 1 });
   res.json(users);
 });
 
-module.exports = usersRouter;
+module.exports = router;
