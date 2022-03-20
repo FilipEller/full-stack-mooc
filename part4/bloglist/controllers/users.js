@@ -45,4 +45,10 @@ router.get('/', async (req, res, next) => {
   res.json(users);
 });
 
+// DELETE
+router.delete('/:id', async (req, res, next) => {
+  await User.findByIdAndRemove(req.params.id);
+  res.status(204).end();
+});
+
 module.exports = router;

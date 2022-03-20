@@ -1,5 +1,13 @@
 const logger = require('./logger');
 
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    req.token = authorization.substring(7);
+  }
+  next();
+};
+
 const unknownEndpoint = (req, res) => {
   res.status(404).json({ error: 'unknown endpoint' });
 };
@@ -13,7 +21,7 @@ const errorHandler = (err, req, res, next) => {
   }
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({
-      error: 'invalid token',
+      error: 'token invalid',
     });
   }
   if (err.name === 'TokenExpiredError') {
@@ -27,13 +35,4 @@ const errorHandler = (err, req, res, next) => {
   next(err);
 };
 
-const tokenExtractor = (req, res, next) => {
-  console.log('extracting token');
-  const authorization = req.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    req.token = authorization.substring(7);
-  }
-  next();
-};
-
-module.exports = { unknownEndpoint, errorHandler, tokenExtractor };
+module.exports = { tokenExtractor, unknownEndpoint, errorHandler };
