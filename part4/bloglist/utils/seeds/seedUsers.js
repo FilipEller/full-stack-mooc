@@ -14,6 +14,6 @@ const seedUsers = [
     name: 'Dante Alighieri',
     password: 'secret2',
   },
-];
+]
 
-module.exports = seedUsers;
+module.exports = seedUsers

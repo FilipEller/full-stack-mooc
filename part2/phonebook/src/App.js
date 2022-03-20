@@ -13,7 +13,7 @@ const App = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    personService.readAll().then(res => {
+    personService.readAll().then((res) => {
       setPersons(res.data);
     });
   }, []);
@@ -29,12 +29,12 @@ const App = () => {
   const createPerson = ({ name, number }) => {
     personService
       .create({ name, number })
-      .then(res => {
+      .then((res) => {
         const person = res.data;
         setPersons(persons.concat(person));
         displayNotification(`Added ${name}.`, true);
       })
-      .catch(error => {
+      .catch((error) => {
         displayNotification(
           `Could not add ${name}: ${error.response.data.error}`,
           false
@@ -42,22 +42,22 @@ const App = () => {
       });
   };
 
-  const updatePerson = person => {
+  const updatePerson = (person) => {
     personService
       .update(person, person.id)
-      .then(res => {
-        setPersons(persons.map(p => (p.id !== person.id ? p : res.data)));
+      .then((res) => {
+        setPersons(persons.map((p) => (p.id !== person.id ? p : res.data)));
         displayNotification(`Updated ${person.name}.`, true);
       })
-      .catch(error => {
-        setPersons(persons.filter(p => p.id !== person.id));
+      .catch((error) => {
+        setPersons(persons.filter((p) => p.id !== person.id));
         displayNotification(`${person.name} was already removed.`, false);
       });
   };
 
-  const deletePerson = person => {
+  const deletePerson = (person) => {
     personService.deleteById(person.id).then(() => {
-      setPersons(persons.filter(p => p.id !== person.id));
+      setPersons(persons.filter((p) => p.id !== person.id));
     });
   };
 
@@ -78,8 +78,8 @@ const App = () => {
 
   return (
     <MantineProvider theme={themes.lightTheme}>
-      <Paper padding='xl' shadow='xl' radius='md' className={classes.container}>
-        <Title order={1} align='center'>
+      <Paper padding="xl" shadow="xl" radius="md" className={classes.container}>
+        <Title order={1} align="center">
           Phonebook
         </Title>
         <Notification message={message} success={success} />

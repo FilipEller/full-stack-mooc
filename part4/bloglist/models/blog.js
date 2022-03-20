@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const blogSchema = new mongoose.Schema(
   {
@@ -31,14 +31,14 @@ const blogSchema = new mongoose.Schema(
     toJSON: {
       transform: (document, returnedObject) => {
         /* eslint-disable */
-        returnedObject.id = returnedObject._id.toString();
-        delete returnedObject._id;
-        delete returnedObject.__v;
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
       },
     },
   }
-);
+)
 
-const Blog = mongoose.model('Blog', blogSchema);
+const Blog = mongoose.model('Blog', blogSchema)
 
-module.exports = Blog;
+module.exports = Blog
