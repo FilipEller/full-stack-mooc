@@ -5,10 +5,10 @@ const helper = require('./test_helper');
 const api = supertest(app);
 
 beforeEach(async () => {
-  await helper.initializeUserDB();
+  await helper.seedDatabase();
 });
 
-describe('with some initially saved user', () => {
+describe('with some initially saved users', () => {
   test('users are returned as JSON', async () => {
     await api
       .get('/api/users')

@@ -1,17 +1,14 @@
 const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
-const Blog = require('../models/blog');
-const User = require('../models/user');
-const logger = require('./logger');
-const { MONGODB_URI } = require('./config');
-const seedUsers = require('./seeds/seedUsers');
-const seedBlogs = require('./seeds/seedBlogs');
+const Blog = require('../../models/blog');
+const User = require('../../models/user');
+const seedUsers = require('./seedUsers');
+const seedBlogs = require('./seedBlogs');
 
 const initializeUserDB = async () => {
   const saltRounds = 10;
   await User.deleteMany({});
 
-  await Promise.all(
+  return Promise.all(
     seedUsers.map(async user => {
       const passwordHash = await bcrypt.hash(user.password, saltRounds);
       const userObj = new User({
@@ -28,12 +25,16 @@ const initializeBlogDB = async () => {
   await Blog.deleteMany({});
   const users = await User.find({});
 
+  if (!users.length) {
+    throw new Error('No users found');
+  }
+
   /* eslint-disable */
   for (let i = 0; i < seedBlogs.length; i++) {
     const user = users[i % users.length];
     const seed = seedBlogs[i];
     const blog = new Blog({ ...seed, user: user._id });
-    
+
     const result = await blog.save();
 
     user.blogs = user.blogs.concat(result._id);
@@ -41,21 +42,9 @@ const initializeBlogDB = async () => {
   }
 };
 
-const main = async () => {
-  mongoose
-    .connect(MONGODB_URI)
-    .then(() => {
-      logger.success('Connected to database');
-    })
-    .catch(err => {
-      logger.error('Failed to connect to database:', err.message);
-    });
-
+const seedDatabase = async () => {
   await initializeUserDB();
-  logger.success('Users seeded')
   await initializeBlogDB();
-  logger.success('Blogs seeded')
-  mongoose.connection.close();
 };
 
-main();
+module.exports = { seedDatabase };

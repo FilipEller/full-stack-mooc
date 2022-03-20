@@ -1,32 +1,8 @@
-const bcrypt = require('bcrypt');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 const initialUsers = require('../utils/seeds/seedUsers');
 const initialBlogs = require('../utils/seeds/seedBlogs');
-
-const initializeBlogDB = async () => {
-  await Blog.deleteMany({});
-  await Promise.all(
-    initialBlogs.map(blog => new Blog(blog)).map(blog => blog.save())
-  );
-};
-
-const initializeUserDB = async () => {
-  const saltRounds = 10;
-  await User.deleteMany({});
-
-  await Promise.all(
-    initialUsers.map(async user => {
-      const passwordHash = await bcrypt.hash(user.password, saltRounds);
-      const userObj = new User({
-        username: user.username,
-        name: user.name,
-        passwordHash,
-      });
-      userObj.save();
-    })
-  );
-};
+const { seedDatabase } = require('../utils/seeds/seed_helper');
 
 const blogsInDB = async () => {
   const blogs = await Blog.find({});
@@ -55,12 +31,40 @@ const nonExistingID = async () => {
   return blog.toJSON().id;
 };
 
+const loggedInUser = async api => {
+  const user = initialUsers[0];
+  const credentials = {
+    username: user.username,
+    password: user.password,
+  };
+
+  const userInDB = await User.findOne({ username: user.username });
+  const response = await api.post('/api/login').send(credentials);
+
+  return { user: userInDB, authorization: `Bearer ${response.body.token}` };
+};
+
+const blogWithAuthorization = async api => {
+  const { user, authorization } = await loggedInUser(api);
+  const blog = await Blog.findById(user.blogs[0]);
+  const blogProcessed = JSON.parse(JSON.stringify(blog));
+
+  return { blog: blogProcessed, authorization };
+};
+
+const validAuthorization = async api => {
+  const { authorization } = await loggedInUser(api);
+  return authorization;
+};
+
 module.exports = {
   initialBlogs,
   initialUsers,
-  initializeBlogDB,
-  initializeUserDB,
+  seedDatabase,
   blogsInDB,
   usersInDB,
   nonExistingID,
+  loggedInUser,
+  blogWithAuthorization,
+  validAuthorization,
 };

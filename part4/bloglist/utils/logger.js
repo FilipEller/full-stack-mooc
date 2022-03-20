@@ -1,7 +1,7 @@
 const colors = require('colors'); // eslint-disable-line
 
 const success = (...params) => {
-  console.log(...params.map(s => s.green));
+  console.log(...params.map(s => s ? s.green : s));
 };
 
 const info = (...params) => {
@@ -9,7 +9,7 @@ const info = (...params) => {
 };
 
 const error = (...params) => {
-  console.error(...params.map(s => s.red));
+  console.error(...params.map(s => s ? s.red : s));
 };
 
 module.exports = { success, info, error };
