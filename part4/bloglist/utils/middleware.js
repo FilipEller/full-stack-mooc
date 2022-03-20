@@ -1,10 +1,23 @@
+const jwt = require('jsonwebtoken');
 const logger = require('./logger');
+const { SECRET } = require('./config');
+const User = require('../models/user');
 
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     req.token = authorization.substring(7);
   }
+  next();
+};
+
+const userExtractor = async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, SECRET);
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: 'token invalid' });
+  }
+  req.user = await User.findById(decodedToken.id);
+
   next();
 };
 
@@ -21,7 +34,7 @@ const errorHandler = (err, req, res, next) => {
   }
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({
-      error: 'token invalid',
+      error: 'token missing or invalid',
     });
   }
   if (err.name === 'TokenExpiredError') {
@@ -35,4 +48,9 @@ const errorHandler = (err, req, res, next) => {
   next(err);
 };
 
-module.exports = { tokenExtractor, unknownEndpoint, errorHandler };
+module.exports = {
+  tokenExtractor,
+  userExtractor,
+  unknownEndpoint,
+  errorHandler,
+};

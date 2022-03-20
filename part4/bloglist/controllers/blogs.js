@@ -1,18 +1,11 @@
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
-const User = require('../models/user');
-const { SECRET } = require('../utils/config');
+const { userExtractor } = require('../utils/middleware');
 
 // CREATE
-router.post('/', async (req, res, next) => {
+router.post('/', userExtractor, async (req, res, next) => {
   const { title, author, url, likes } = req.body;
-
-  const decodedToken = jwt.verify(req.token, SECRET);
-  if (!decodedToken.id) {
-    return res.status(401).json({ error: 'token missing or invalid' });
-  }
-  const user = await User.findById(decodedToken.id);
+  const { user } = req;
 
   const blogToCreate = new Blog({
     title,
@@ -37,13 +30,22 @@ router.get('/', async (req, res, next) => {
 });
 
 // UPDATE
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', userExtractor, async (req, res, next) => {
+  const { user } = req;
+
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog.user.toString() !== user._id.toString()) {
+    return res.status(403).json({ error: 'updating not permitted' });
+  }
+
   const { title, author, url, likes } = req.body;
   const blogToUpdate = {
     title,
     author,
     url,
     likes,
+    user,
   };
 
   const result = await Blog.findByIdAndUpdate(req.params.id, blogToUpdate, {
@@ -53,13 +55,8 @@ router.put('/:id', async (req, res, next) => {
 });
 
 // DELETE
-router.delete('/:id', async (req, res, next) => {
-  const decodedToken = jwt.verify(req.token, SECRET);
-
-  if (!decodedToken.id) {
-    return res.status(401).json({ error: 'token missing or invalid' });
-  }
-  const user = await User.findById(decodedToken.id);
+router.delete('/:id', userExtractor, async (req, res, next) => {
+  const { user } = req;
 
   const blog = await Blog.findById(req.params.id);
 

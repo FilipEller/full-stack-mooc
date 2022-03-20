@@ -21,27 +21,7 @@ module.exports = {
     'arrow-parens': 0,
     'no-plusplus': 0,
     'no-confusing-arrow': 0,
-    'object-curly-newline': [
-      'error',
-      {
-        ObjectExpression: {
-          minProperties: 4,
-          multiline: true,
-          consistent: true,
-        },
-        ObjectPattern: 'never',
-        ImportDeclaration: {
-          minProperties: 4,
-          multiline: true,
-          consistent: true,
-        },
-        ExportDeclaration: {
-          minProperties: 4,
-          multiline: true,
-          consistent: true,
-        },
-      },
-    ],
+    'object-curly-newline': 0,
     'comma-dangle': [
       'error',
       {

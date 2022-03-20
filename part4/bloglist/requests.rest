@@ -7,19 +7,20 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hcnkiLCJpZCI6IjYyMzcyNzZkMDZjOTViMmQyYmMwMDUwNCIsImlhdCI6MTY0Nzc4MTc0OCwiZXhwIjoxNjQ3Nzg1MzQ4fQ.h94drfVT5cGtHE0wwBWTIFiOqZR18ScW8wjZkr6IAY0
 
 {
-  "title": "Top 17 people",
+  "title": "Top 15 people",
   "author": "Joe Johnson",
   "url": "https://www.economist.com/",
   "likes": "193"
 }
 
 ### DELETE Blog
-DELETE http://localhost:3003/api/blogs/6237279406c95b2d2bc00508
+DELETE http://localhost:3003/api/blogs/6237314b6911154bda7cd23d
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hcnkiLCJpZCI6IjYyMzcyNzZkMDZjOTViMmQyYmMwMDUwNCIsImlhdCI6MTY0Nzc4MTc0OCwiZXhwIjoxNjQ3Nzg1MzQ4fQ.h94drfVT5cGtHE0wwBWTIFiOqZR18ScW8wjZkr6IAY0
 
 ### UPDATE Blog
-PUT http://localhost:3003/api/blogs/622cb479640263f2f0f11906
+PUT http://localhost:3003/api/blogs/6237314b6911154bda7cd23d
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hcnkiLCJpZCI6IjYyMzcyNzZkMDZjOTViMmQyYmMwMDUwNCIsImlhdCI6MTY0Nzc4MTc0OCwiZXhwIjoxNjQ3Nzg1MzQ4fQ.h94drfVT5cGtHE0wwBWTIFiOqZR18ScW8wjZkr6IAY0
 
 {
   "title": "Top 10 people",
