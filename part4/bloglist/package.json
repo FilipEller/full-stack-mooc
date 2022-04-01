@@ -38,9 +38,10 @@
   },
   "prettier": {
     "singleQuote": true,
-    "semi": false,
+    "semi": true,
     "bracketSameLine": true,
     "arrowParens": "avoid",
-    "jsxSingleQuote": true
+    "jsxSingleQuote": true,
+    "endOfLine": "lf"
   }
 }
