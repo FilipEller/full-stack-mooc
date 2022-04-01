@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
+import BlogList from './components/BlogList'
 import { Container, Typography } from '@mui/material'
 import loginService from './services/login'
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -38,10 +40,11 @@ const App = () => {
       <Typography variant='h1' gutterBottom component='div'>
         Blogs
       </Typography>
-      {!user && <LoginForm handleLogin={handleLogin} />}
-      {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      {user ? (
+        <BlogList blogs={blogs} />
+      ) : (
+        <LoginForm handleLogin={handleLogin} />
+      )}
     </Container>
   )
 }
