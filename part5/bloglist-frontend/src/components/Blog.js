@@ -33,6 +33,7 @@ const Blog = ({ blog }) => {
                   <a href={blog.url}>{blog.url}</a>
                   {'>'}
                 </div>
+                <div>User: {blog.user.username}</div>
                 <div>
                   Likes: {blog.likes} <Button size='small'>Like</Button>
                 </div>

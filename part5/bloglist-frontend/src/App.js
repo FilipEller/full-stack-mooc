@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
@@ -15,6 +15,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const [success, setSuccess] = useState(false)
+
+  const blogFormRef = useRef()
 
   // Get all blogs from backend
   useEffect(() => {
@@ -68,6 +70,7 @@ const App = () => {
       setTimeout(() => {
         setMessage(null)
       }, 5000)
+      blogFormRef.current.toggleVisibility()
       return newBlog
     } catch (err) {
       setMessage('Failed adding blog')
@@ -98,7 +101,7 @@ const App = () => {
       </Paper>
       {user && (
         <>
-          <Togglable buttonLabel='Add a blog'>
+          <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
             <CreateBlogForm createBlog={createBlog} />
           </Togglable>
           <BlogList blogs={blogs} />
