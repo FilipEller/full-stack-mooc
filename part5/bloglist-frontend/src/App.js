@@ -46,9 +46,15 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    console.log('loggin out')
+    console.log('logging out')
     setUser(null)
     window.localStorage.removeItem('loggedInUser')
+  }
+
+  const addBlog = ({ title, author, url }) => {
+    console.log('adding blog')
+    const blogToCreate = { title, author, url }
+    blogService.create(blogToCreate)
   }
 
   return (
