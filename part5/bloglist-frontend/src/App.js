@@ -4,7 +4,8 @@ import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import UserInfo from './components/UserInfo'
-import { Container, Typography, Box } from '@mui/material'
+import CreateBlogForm from './components/CreateBlogForm'
+import { Container, Typography, Paper } from '@mui/material'
 import loginService from './services/login'
 
 const App = () => {
@@ -56,20 +57,23 @@ const App = () => {
       <Typography variant='h1' gutterBottom component='div'>
         Blogs
       </Typography>
-      <Box
+      <Paper
+        elevation={2}
         sx={{
-          p: 2,
-          border: '1px solid',
-          borderWidth: '2px',
-          borderRadius: '5px',
+          p: 3,
         }}>
         {user ? (
           <UserInfo name={user.name} handleLogout={handleLogout} />
         ) : (
           <LoginForm handleLogin={handleLogin} />
         )}
-      </Box>
-      {user && <BlogList blogs={blogs} />}
+      </Paper>
+      {user && (
+        <>
+          <CreateBlogForm />
+          <BlogList blogs={blogs} />
+        </>
+      )}
     </Container>
   )
 }

@@ -11,47 +11,47 @@ const LoginForm = ({ handleLogin }) => {
   }
 
   return (
-    <form onSubmit={onLogin}>
+    <Box
+      component='form'
+      onSubmit={onLogin}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}>
       <Typography variant='h4' gutterBottom component='div'>
         Log in
       </Typography>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <Box
-          sx={{
-            '& .MuiTextField-root': { mb: 1, width: '25ch' },
-          }}
-          noValidate
-          autoComplete='off'>
-          <div>
-            <TextField
-              label='Username'
-              variant='outlined'
-              required
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            <TextField
-              label='Password'
-              variant='outlined'
-              type='password'
-              required
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-        </Box>
-        <Button variant='contained' type='submit'>
-          Log in
-        </Button>
+          '& .MuiTextField-root': { mb: 2, width: '40ch' },
+        }}
+        noValidate
+        autoComplete='off'>
+        <div>
+          <TextField
+            label='Username'
+            variant='outlined'
+            required
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          <TextField
+            label='Password'
+            variant='outlined'
+            type='password'
+            required
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
       </Box>
-    </form>
+      <Button sx={{ px: 2 }} variant='contained' type='submit'>
+        Log in
+      </Button>
+    </Box>
   )
 }
 
