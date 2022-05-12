@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 
 const BlogList = ({ blogs }) => {
   return (
-    <Box sx={{ p: 2 }}>
+    <Box>
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
       ))}

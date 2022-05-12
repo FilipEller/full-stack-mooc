@@ -34,11 +34,11 @@ const Togglable = forwardRef((props, ref) => {
           display: showWhenVisible,
         }}>
         {props.children}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
           <Button variant='contained' onClick={toggleVisibility}>
             Cancel
           </Button>
-        </div>
+        </Box>
       </div>
     </div>
   )
