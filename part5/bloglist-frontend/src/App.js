@@ -6,6 +6,7 @@ import BlogList from './components/BlogList'
 import UserInfo from './components/UserInfo'
 import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import { Container, Typography, Paper } from '@mui/material'
 import loginService from './services/login'
 
@@ -97,7 +98,9 @@ const App = () => {
       </Paper>
       {user && (
         <>
-          <CreateBlogForm createBlog={createBlog} />
+          <Togglable buttonLabel='Add a blog'>
+            <CreateBlogForm createBlog={createBlog} />
+          </Togglable>
           <BlogList blogs={blogs} />
         </>
       )}
