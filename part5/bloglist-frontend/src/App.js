@@ -25,6 +25,7 @@ const App = () => {
     if (loggedInUserJSON) {
       const user = JSON.parse(loggedInUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -36,6 +37,8 @@ const App = () => {
         username,
         password,
       })
+
+      blogService.setToken(user.token)
       setUser(user)
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
     } catch (err) {
@@ -52,10 +55,17 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
-  const addBlog = ({ title, author, url }) => {
-    console.log('adding blog')
-    const blogToCreate = { title, author, url }
-    blogService.create(blogToCreate)
+  const createBlog = async ({ title, author, url }) => {
+    try {
+      console.log('adding blog')
+      return await blogService.create({ title, author, url })
+    } catch (err) {
+      setErrorMessage(err)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      return null
+    }
   }
 
   return (
@@ -76,7 +86,7 @@ const App = () => {
       </Paper>
       {user && (
         <>
-          <CreateBlogForm />
+          <CreateBlogForm createBlog={createBlog}/>
           <BlogList blogs={blogs} />
         </>
       )}

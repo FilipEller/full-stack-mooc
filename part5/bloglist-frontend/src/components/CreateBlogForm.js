@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   TextField,
   Box,
@@ -10,11 +10,25 @@ import {
   Input,
 } from '@mui/material'
 
-const CreateBlogForm = () => {
+const CreateBlogForm = ({ createBlog }) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const onSubmit = async () => {
+    event.preventDefault()
+    const data = await createBlog({ title, author, url })
+    if (data) {
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    }
+  }
+
   return (
     <Box
       component='form'
-      onSubmit={() => console.log('submitted')}
+      onSubmit={onSubmit}
       sx={{ my: 3, '& .MuiFormControl-root': { my: 2 } }}
       noValidate
       autoComplete='off'>
@@ -26,6 +40,8 @@ const CreateBlogForm = () => {
         <Input
           id='standard-adornment-amount'
           startAdornment={<InputAdornment position='start'></InputAdornment>}
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
         />
       </FormControl>
       <FormControl fullWidth variant='standard'>
@@ -33,6 +49,8 @@ const CreateBlogForm = () => {
         <Input
           id='standard-adornment-amount'
           startAdornment={<InputAdornment position='start'></InputAdornment>}
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
         />
       </FormControl>
       <FormControl fullWidth variant='standard'>
@@ -40,6 +58,8 @@ const CreateBlogForm = () => {
         <Input
           id='standard-adornment-amount'
           startAdornment={<InputAdornment position='start'></InputAdornment>}
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
         />
       </FormControl>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
