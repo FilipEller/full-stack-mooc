@@ -5,13 +5,15 @@ import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import UserInfo from './components/UserInfo'
 import CreateBlogForm from './components/CreateBlogForm'
+import Notification from './components/Notification'
 import { Container, Typography, Paper } from '@mui/material'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [success, setSuccess] = useState(false)
 
   // Get all blogs from backend
   useEffect(() => {
@@ -42,9 +44,10 @@ const App = () => {
       setUser(user)
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
     } catch (err) {
-      setErrorMessage('Wrong credentials')
+      setMessage('Wrong credentials')
+      setSuccess(false)
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
   }
@@ -57,12 +60,19 @@ const App = () => {
 
   const createBlog = async ({ title, author, url }) => {
     try {
-      console.log('adding blog')
-      return await blogService.create({ title, author, url })
-    } catch (err) {
-      setErrorMessage(err)
+      const newBlog = await blogService.create({ title, author, url })
+      setBlogs(blogs.concat(newBlog))
+      setMessage(`New blog '${newBlog.title}' by ${newBlog.author} added`)
+      setSuccess(true)
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
+      }, 5000)
+      return newBlog
+    } catch (err) {
+      setMessage('Failed adding blog')
+      setSuccess(false)
+      setTimeout(() => {
+        setMessage(null)
       }, 5000)
       return null
     }
@@ -73,6 +83,7 @@ const App = () => {
       <Typography variant='h1' gutterBottom component='div'>
         Blogs
       </Typography>
+      {message && <Notification message={message} success={success} />}
       <Paper
         elevation={2}
         sx={{
@@ -86,7 +97,7 @@ const App = () => {
       </Paper>
       {user && (
         <>
-          <CreateBlogForm createBlog={createBlog}/>
+          <CreateBlogForm createBlog={createBlog} />
           <BlogList blogs={blogs} />
         </>
       )}
