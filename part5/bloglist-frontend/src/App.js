@@ -47,7 +47,7 @@ const App = () => {
       setUser(user)
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
     } catch (err) {
-      setMessage('Wrong credentials')
+      setMessage('Incorrect username or password.')
       setSuccess(false)
       setTimeout(() => {
         setMessage(null)
@@ -73,7 +73,7 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
       return newBlog
     } catch (err) {
-      setMessage('Failed adding blog')
+      setMessage('Adding blog failed.')
       setSuccess(false)
       setTimeout(() => {
         setMessage(null)
@@ -90,13 +90,30 @@ const App = () => {
         blogs.map(b => (b.id === newBlog.id ? { ...b, likes: likes + 1 } : b))
       )
     } catch (err) {
-      setMessage('Failed liking blog')
+      setMessage('Liking blog failed.')
       setSuccess(false)
       setTimeout(() => {
         setMessage(null)
       }, 5000)
       return null
     }
+  }
+
+  const deleteBlog = async ({ id, title, author }) => {
+    if (window.confirm(`Do you want to delete ${title} by ${author}?`)) {
+      try {
+        const response = await blogService.remove(id)
+        setBlogs(blogs.filter(b => b.id !== id))
+        return response.data
+      } catch (err) {
+        setMessage('Deleting blog failed.')
+        setSuccess(false)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      }
+    }
+    return null
   }
 
   return (
@@ -121,7 +138,12 @@ const App = () => {
           <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
             <CreateBlogForm createBlog={createBlog} />
           </Togglable>
-          <BlogList blogs={blogs} likeBlog={likeBlog} />
+          <BlogList
+            blogs={blogs}
+            likeBlog={likeBlog}
+            user={user}
+            deleteBlog={deleteBlog}
+          />
         </>
       )}
     </Container>

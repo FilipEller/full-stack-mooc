@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Paper, Grid, Button, Box } from '@mui/material'
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const gridStyle = {
@@ -13,7 +13,6 @@ const Blog = ({ blog, likeBlog }) => {
   return (
     <Paper
       variant='outlined'
-      elevation={4}
       sx={{
         fontFamily: 'Roboto',
         wordWrap: 'break-word',
@@ -40,6 +39,16 @@ const Blog = ({ blog, likeBlog }) => {
                     Like
                   </Button>
                 </div>
+                {user.username === blog.user.username && (
+                  <div>
+                    <Button
+                      variant='outlined'
+                      size='small'
+                      onClick={() => deleteBlog(blog)}>
+                      Delete
+                    </Button>
+                  </div>
+                )}
               </Box>
             )}
           </div>
