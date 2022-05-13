@@ -82,6 +82,23 @@ const App = () => {
     }
   }
 
+  const likeBlog = async ({ id, user, likes, author, title, url }) => {
+    try {
+      const blog = { user: user.id, likes: likes + 1, author, title, url }
+      const newBlog = await blogService.update(id, blog)
+      setBlogs(
+        blogs.map(b => (b.id === newBlog.id ? { ...b, likes: likes + 1 } : b))
+      )
+    } catch (err) {
+      setMessage('Failed liking blog')
+      setSuccess(false)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+      return null
+    }
+  }
+
   return (
     <Container maxWidth='sm'>
       <Typography variant='h1' gutterBottom component='div'>
@@ -104,7 +121,7 @@ const App = () => {
           <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
             <CreateBlogForm createBlog={createBlog} />
           </Togglable>
-          <BlogList blogs={blogs} />
+          <BlogList blogs={blogs} likeBlog={likeBlog} />
         </>
       )}
     </Container>

@@ -34,29 +34,28 @@ const CreateBlogForm = ({ createBlog }) => {
       <Typography variant='h4' gutterBottom component='div'>
         Create a Blog
       </Typography>
-      <FormControl fullWidth variant='standard'>
-        <InputLabel htmlFor='standard-adornment-amount'>Title</InputLabel>
+      <FormControl fullWidth variant='standard' required>
+        <InputLabel htmlFor='title-input'>Title</InputLabel>
         <Input
-          id='standard-adornment-amount'
-          startAdornment={<InputAdornment position='start'></InputAdornment>}
+          id='title-input'
+          required
           value={title}
           onChange={({ target }) => setTitle(target.value)}
         />
       </FormControl>
-      <FormControl fullWidth variant='standard'>
-        <InputLabel htmlFor='standard-adornment-amount'>Author</InputLabel>
+      <FormControl fullWidth variant='standard' required>
+        <InputLabel htmlFor='author-input'>Author</InputLabel>
         <Input
-          id='standard-adornment-amount'
-          startAdornment={<InputAdornment position='start'></InputAdornment>}
+          id='author-input'
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
         />
       </FormControl>
-      <FormControl fullWidth variant='standard'>
-        <InputLabel htmlFor='standard-adornment-amount'>URL</InputLabel>
+      <FormControl fullWidth variant='standard' required>
+        <InputLabel htmlFor='url-input'>URL</InputLabel>
         <Input
-          id='standard-adornment-amount'
-          startAdornment={<InputAdornment position='start'></InputAdornment>}
+          id='url-input'
+          required
           value={url}
           onChange={({ target }) => setUrl(target.value)}
         />

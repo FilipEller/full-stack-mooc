@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Paper, Grid, Button, Box } from '@mui/material'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, likeBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const gridStyle = {
@@ -35,7 +35,10 @@ const Blog = ({ blog }) => {
                 </div>
                 <div>User: {blog.user.username}</div>
                 <div>
-                  Likes: {blog.likes} <Button size='small'>Like</Button>
+                  Likes: {blog.likes}{' '}
+                  <Button size='small' onClick={() => likeBlog(blog)}>
+                    Like
+                  </Button>
                 </div>
               </Box>
             )}
