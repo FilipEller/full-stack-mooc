@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Paper, Grid, Button, Box } from '@mui/material'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
@@ -64,6 +65,13 @@ const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
       </Grid>
     </Paper>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likeBlog: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
 }
 
 export default Blog
