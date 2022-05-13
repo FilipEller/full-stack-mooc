@@ -13,7 +13,7 @@ const CreateBlogForm = ({ createBlog }) => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const onSubmit = async () => {
+  const onSubmit = async event => {
     event.preventDefault()
     const data = await createBlog({ title, author, url })
     if (data) {
