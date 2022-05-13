@@ -2,6 +2,7 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
+import userEvent from '@testing-library/user-event'
 
 describe('Blog', () => {
   beforeEach(() => {
@@ -39,5 +40,16 @@ describe('Blog', () => {
     expect(url).toBeNull()
     const likes = screen.queryByText(/3/)
     expect(likes).toBeNull()
+  })
+
+  test('renders also url and likes after clicking "view"', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText(/view/i)
+    await user.click(button)
+
+    screen.getByText('My Statement on Ukraine')
+    screen.getByText('Barack Obama')
+    screen.getByText(/barackobama.medium.com/)
+    screen.getByText(/3/)
   })
 })
