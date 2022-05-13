@@ -20,9 +20,7 @@ module.exports = {
     'no-console': 0,
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 'off',
-    'no-unused-vars': 0,
     'object-curly-bracing': 0,
-    
   },
   settings: {
     react: {
