@@ -5,9 +5,11 @@ import { Box } from '@mui/material'
 const BlogList = ({ blogs, likeBlog }) => {
   return (
     <Box>
-      {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
-      ))}
+      {blogs
+        .sort((b1, b2) => b2.likes - b1.likes)
+        .map(blog => (
+          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
+        ))}
     </Box>
   )
 }
