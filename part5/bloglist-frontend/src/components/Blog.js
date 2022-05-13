@@ -19,7 +19,8 @@ const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
         wordWrap: 'break-word',
         my: 2,
         p: 2,
-      }}>
+      }}
+      className='blog'>
       <Grid container sx={gridStyle}>
         <Grid item xs={7}>
           <div>

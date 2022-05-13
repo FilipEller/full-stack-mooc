@@ -31,7 +31,7 @@ const CreateBlogForm = ({ createBlog }) => {
       noValidate
       autoComplete='off'>
       <Typography variant='h4' gutterBottom component='div'>
-        Create a Blog
+        Add a Blog
       </Typography>
       <FormControl fullWidth variant='standard' required>
         <InputLabel htmlFor='title-input'>Title</InputLabel>
