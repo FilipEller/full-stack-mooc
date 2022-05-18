@@ -93,7 +93,7 @@ describe('Blog app', function () {
         cy.get('@blog').contains(/likes: 1/i)
       })
 
-      it.only('a blog can be deleted', function () {
+      it('a blog can be deleted', function () {
         cy.contains('article', /Blog 1/)
           .as('blog')
           .find('button', /view/i)
@@ -101,8 +101,51 @@ describe('Blog app', function () {
         cy.get('@blog')
           .contains('button', /delete/i)
           .click()
-          
+
         cy.should('not.contain', /Blog 1/)
+      })
+
+      describe('and blogs have likes', function () {
+        beforeEach(function () {
+          cy.contains('article', /Blog 1/)
+            .as('blog1')
+            .find('button', /view/i)
+            .click()
+          cy.get('@blog1').contains('button', /like/i).click()
+          cy.get('@blog1').contains(/likes: 1/i)
+          cy.get('@blog1').contains('button', /like/i).click()
+          cy.get('@blog1').contains(/likes: 2/i)
+
+          cy.contains('article', /Blog 2/)
+            .as('blog2')
+            .find('button', /view/i)
+            .click()
+          cy.get('@blog2').contains('button', /like/i).click()
+          cy.get('@blog2').contains(/likes: 1/i)
+
+          cy.contains('article', /Blog 3/)
+            .as('blog3')
+            .find('button', /view/i)
+            .click()
+          cy.get('@blog3').contains('button', /like/i).click()
+          cy.get('@blog3').contains(/likes: 1/i)
+          cy.get('@blog3').contains('button', /like/i).click()
+          cy.get('@blog3').contains(/likes: 2/i)
+          cy.get('@blog3').contains('button', /like/i).click()
+          cy.get('@blog3').contains(/likes: 3/i)
+        })
+
+        it('blogs are sorted in descending order of likes', function () {
+          cy.get('article.blog')
+            .eq(0)
+            .contains(/Blog 3/)
+          cy.get('article.blog')
+            .eq(1)
+            .contains(/Blog 1/)
+          cy.get('article.blog')
+            .eq(2)
+            .contains(/Blog 2/)
+        })
       })
     })
   })
