@@ -19,7 +19,7 @@ const LoginForm = ({ handleLogin }) => {
         flexDirection: 'column',
         alignItems: 'center',
       }}>
-      <Typography variant='h4' gutterBottom component='div'>
+      <Typography variant='h4' gutterBottom component='h4'>
         Log in
       </Typography>
       <Box
