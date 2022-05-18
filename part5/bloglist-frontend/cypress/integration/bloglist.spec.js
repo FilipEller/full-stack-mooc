@@ -84,13 +84,25 @@ describe('Blog app', function () {
         })
       })
 
-      it.only('a blog can be liked', function () {
+      it('a blog can be liked', function () {
         cy.contains('article', /Blog 1/)
           .as('blog')
-          .find('button', /view/)
+          .find('button', /view/i)
           .click()
         cy.get('@blog').contains('button', /like/i).click()
         cy.get('@blog').contains(/likes: 1/i)
+      })
+
+      it.only('a blog can be deleted', function () {
+        cy.contains('article', /Blog 1/)
+          .as('blog')
+          .find('button', /view/i)
+          .click()
+        cy.get('@blog')
+          .contains('button', /delete/i)
+          .click()
+          
+        cy.should('not.contain', /Blog 1/)
       })
     })
   })
