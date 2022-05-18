@@ -20,7 +20,8 @@ const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
         my: 2,
         p: 2,
       }}
-      className='blog'>
+      className='blog'
+      component='article'>
       <Grid container sx={gridStyle}>
         <Grid item xs={7}>
           <div>

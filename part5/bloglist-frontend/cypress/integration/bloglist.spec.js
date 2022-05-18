@@ -44,16 +44,10 @@ describe('Blog app', function () {
 
   describe('When logged in', function () {
     beforeEach(function () {
-      cy.request('POST', 'http://localhost:3003/api/login', {
-        username: 'miguel',
-        password: 'secret',
-      }).then(response => {
-        localStorage.setItem('loggedInUser', JSON.stringify(response.body))
-        cy.visit('http://localhost:3000')
-      })
+      cy.login({ username: 'miguel', password: 'secret' })
     })
 
-    it.only('A blog can be created', function () {
+    it('A blog can be created', function () {
       cy.contains('button', /add a blog/i).click()
       cy.contains('div', /title/i)
         .find('input')
@@ -69,6 +63,35 @@ describe('Blog app', function () {
       cy.contains('button', /submit/i).click()
 
       cy.contains(/End-to-End testing with Cypress/)
+    })
+
+    describe('and some blogs exist', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'Blog 1',
+          author: 'Author 1',
+          url: 'https://medium.com',
+        })
+        cy.createBlog({
+          title: 'Blog 2',
+          author: 'Author 2',
+          url: 'https://www.economist.com/',
+        })
+        cy.createBlog({
+          title: 'Blog 3',
+          author: 'Author 3',
+          url: 'https://read.deeplearning.ai/the-batch/',
+        })
+      })
+
+      it.only('a blog can be liked', function () {
+        cy.contains('article', /Blog 1/)
+          .as('blog')
+          .find('button', /view/)
+          .click()
+        cy.get('@blog').contains('button', /like/i).click()
+        cy.get('@blog').contains(/likes: 1/i)
+      })
     })
   })
 })
