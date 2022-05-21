@@ -15,7 +15,8 @@ router.post('/', userExtractor, async (req, res, next) => {
     user: user._id,
   })
 
-  const result = await blogToCreate.save()
+  const saved = await blogToCreate.save()
+  const result = await saved.populate('user', { username: 1, name: 1 })
 
   user.blogs = user.blogs.concat(result._id)
   await user.save()
@@ -30,20 +31,14 @@ router.get('/', async (req, res, next) => {
 })
 
 // UPDATE
-router.put('/:id', userExtractor, async (req, res, next) => {
-  const { user } = req
-
+router.put('/:id', async (req, res, next) => {
   const blog = await Blog.findById(req.params.id)
 
   if (!blog) {
     return res.status(404).json({ error: 'blog not found' })
   }
 
-  if (blog.user.toString() !== user._id.toString()) {
-    return res.status(403).json({ error: 'updating not permitted' })
-  }
-
-  const { title, author, url, likes } = req.body
+  const { title, author, url, likes, user } = req.body
   const blogToUpdate = {
     title,
     author,

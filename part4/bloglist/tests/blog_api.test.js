@@ -179,13 +179,12 @@ describe('deletion of a blog', () => {
 
 describe('updating a blog', () => {
   test('succeeds with status code 200 if id is valid', async () => {
-    const { blog, authorization } = await helper.blogWithAuthorization(api)
+    const { blog } = await helper.blogWithAuthorization(api)
     const modifiedBlog = { ...blog, likes: blog.likes + 1 }
 
     await api
       .put(`/api/blogs/${blog.id}`)
       .send(modifiedBlog)
-      .set({ Authorization: authorization })
       .expect(200, modifiedBlog)
 
     const blogsAfter = await helper.blogsInDB()
@@ -195,11 +194,10 @@ describe('updating a blog', () => {
   })
 
   test('succeeds with status code 200 even if content is missing', async () => {
-    const { blog, authorization } = await helper.blogWithAuthorization(api)
+    const { blog } = await helper.blogWithAuthorization(api)
 
     await api
       .put(`/api/blogs/${blog.id}`)
-      .set({ Authorization: authorization })
       .expect(200, blog)
 
     const blogsAfter = await helper.blogsInDB()
@@ -208,14 +206,13 @@ describe('updating a blog', () => {
   })
 
   test('fails with status code 404 if id is invalid', async () => {
-    const { blog, authorization } = await helper.blogWithAuthorization(api)
+    const { blog } = await helper.blogWithAuthorization(api)
     const modifiedBlog = { ...blog, likes: blog.likes + 1 }
     const invalidID = await helper.nonExistingID()
 
     await api
       .put(`/api/blogs/${invalidID}`)
       .send(modifiedBlog)
-      .set({ Authorization: authorization })
       .expect(404)
 
     const blogsAfter = await helper.blogsInDB()
@@ -224,12 +221,11 @@ describe('updating a blog', () => {
   })
 
   test('fails with status code 400 if id is malformatted', async () => {
-    const { blog, authorization } = await helper.blogWithAuthorization(api)
+    const { blog } = await helper.blogWithAuthorization(api)
     const modifiedBlog = { ...blog, likes: blog.likes + 1 }
 
     await api
       .put('/api/blogs/000')
-      .set({ Authorization: authorization })
       .send(modifiedBlog)
       .expect(400)
 
