@@ -10,7 +10,9 @@ import { useEffect } from 'react'
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    anecdoteService.getAll().then(notes => dispatch(setAnecdotes(notes)))
+    anecdoteService
+      .getAll()
+      .then(anecdotes => dispatch(setAnecdotes(anecdotes)))
   }, [dispatch])
 
   return (
