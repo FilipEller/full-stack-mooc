@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
+import { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -85,6 +86,9 @@ const CreateNew = props => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
   const navigate = useNavigate()
+  const contentInput = useField('text')
+  const authorInput = useField('text')
+  const infoInput = useField('text')
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -103,27 +107,15 @@ const CreateNew = props => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input
-            name='content'
-            value={content}
-            onChange={e => setContent(e.target.value)}
-          />
+          <input name='content' {...contentInput} />
         </div>
         <div>
           author
-          <input
-            name='author'
-            value={author}
-            onChange={e => setAuthor(e.target.value)}
-          />
+          <input name='author' {...authorInput} />
         </div>
         <div>
           url for more info
-          <input
-            name='info'
-            value={info}
-            onChange={e => setInfo(e.target.value)}
-          />
+          <input name='info' {...infoInput} />
         </div>
         <button>create</button>
       </form>
