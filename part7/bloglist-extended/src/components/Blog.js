@@ -3,10 +3,12 @@ import { Paper, Grid, Button, Box } from '@mui/material'
 import PropTypes from 'prop-types'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
 
   const gridStyle = {
     display: 'flex',
@@ -72,9 +74,6 @@ const Blog = ({ blog, user }) => {
   )
 }
 
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-}
+Blog.propTypes = { blog: PropTypes.object.isRequired }
 
 export default Blog

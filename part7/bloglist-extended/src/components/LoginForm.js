@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import { TextField, Box, Typography, Button } from '@mui/material'
+import { handleLogin } from '../reducers/userReducer'
+import { useDispatch } from 'react-redux'
 
-const LoginForm = ({ handleLogin }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const dispatch = useDispatch()
+
   const onLogin = event => {
     event.preventDefault()
-    handleLogin(username, password)
+    dispatch(handleLogin(username, password))
   }
 
   return (
