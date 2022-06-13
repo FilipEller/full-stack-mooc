@@ -1,5 +1,14 @@
 import { useMatch } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Typography,
+} from '@mui/material'
+import { Link } from 'react-router-dom'
 
 const UserView = () => {
   const match = useMatch('/users/:id')
@@ -12,14 +21,29 @@ const UserView = () => {
 
   return (
     <>
-      <h2>{user.name}</h2>
-      <div>{user.username}</div>
-      <h3>Added blogs</h3>
-      <ul>
-        {user.blogs.map(blog => (
-          <li key={blog.id}>{blog.title}</li>
-        ))}
-      </ul>
+      <Typography variant='h4' gutterBottom component='h4'>
+        {user.name}
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              <Typography variant='h6' gutterBottom component='h6'>
+                Added blogs
+              </Typography>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {user.blogs.map(blog => (
+            <TableRow key={blog.id}>
+              <TableCell>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </>
   )
 }

@@ -56,43 +56,45 @@ const App = () => {
   }
 
   return (
-    <Container maxWidth='sm'>
+    <div>
       {user && <Navbar />}
-      <Notification />
-      <Typography variant='h1' gutterBottom component='div'>
-        Blogs
-      </Typography>
-      {!user && (
-        <Paper
-          elevation={2}
-          sx={{
-            p: 3,
-          }}>
-          <LoginForm />
-        </Paper>
-      )}
-
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <>
-              {user && (
+      <Container maxWidth='sm'>
+        <Typography variant='h1' gutterBottom component='h1'>
+          Blogs
+        </Typography>
+        <Notification />
+        {user ? (
+          <Routes>
+            <Route
+              path='/'
+              element={
                 <>
-                  <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
-                    <CreateBlogForm createBlog={createBlog} />
-                  </Togglable>
-                  <BlogList />
+                  {user && (
+                    <>
+                      <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
+                        <CreateBlogForm createBlog={createBlog} />
+                      </Togglable>
+                      <BlogList />
+                    </>
+                  )}
                 </>
-              )}
-            </>
-          }
-        />
-        <Route path='/users' element={<UserList />} />
-        <Route path='/users/:id' element={<UserView />} />
-        <Route path='/blogs/:id' element={<BlogView />} />
-      </Routes>
-    </Container>
+              }
+            />
+            <Route path='/users' element={<UserList />} />
+            <Route path='/users/:id' element={<UserView />} />
+            <Route path='/blogs/:id' element={<BlogView />} />
+          </Routes>
+        ) : (
+          <Paper
+            elevation={2}
+            sx={{
+              p: 3,
+            }}>
+            <LoginForm />
+          </Paper>
+        )}
+      </Container>
+    </div>
   )
 }
 

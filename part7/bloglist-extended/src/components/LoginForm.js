@@ -28,26 +28,31 @@ const LoginForm = () => {
       </Typography>
       <Box
         sx={{
-          '& .MuiTextField-root': { mb: 2, width: '40ch' },
+          '& > .input': {
+            mb: 2,
+            width: '40ch',
+          },
         }}
         noValidate
         autoComplete='off'>
-        <div>
+        <div className='input'>
           <TextField
             label='Username'
             variant='outlined'
             required
             value={username}
+            fullWidth
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
-        <div>
+        <div className='input'>
           <TextField
             label='Password'
             variant='outlined'
             type='password'
             required
             value={password}
+            fullWidth
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
