@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Paper, Grid, Button, Box } from '@mui/material'
 import PropTypes from 'prop-types'
-import { likeBlog } from '../reducers/blogReducer'
+import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, user, deleteBlog }) => {
+const Blog = ({ blog, user }) => {
   const [showDetails, setShowDetails] = useState(false)
   const dispatch = useDispatch()
 
@@ -50,7 +50,7 @@ const Blog = ({ blog, user, deleteBlog }) => {
                     <Button
                       variant='outlined'
                       size='small'
-                      onClick={() => deleteBlog(blog)}>
+                      onClick={() => dispatch(deleteBlog(blog))}>
                       Delete
                     </Button>
                   </div>
@@ -75,7 +75,6 @@ const Blog = ({ blog, user, deleteBlog }) => {
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
 }
 
 export default Blog

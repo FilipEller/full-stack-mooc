@@ -2,7 +2,7 @@ import React from 'react'
 import Blog from './Blog'
 import { Box } from '@mui/material'
 
-const BlogList = ({ blogs, user, deleteBlog }) => {
+const BlogList = ({ blogs, user }) => {
   return (
     <Box>
       {[...blogs]
@@ -12,7 +12,6 @@ const BlogList = ({ blogs, user, deleteBlog }) => {
             key={blog.id}
             blog={blog}
             user={user}
-            deleteBlog={deleteBlog}
           />
         ))}
     </Box>

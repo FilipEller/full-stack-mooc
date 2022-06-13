@@ -13,40 +13,23 @@ const blogSlice = createSlice({
       return action.payload
     },
     updateBlog(state, action) {
-      return state.map(anecdote =>
-        anecdote.id === action.payload.id ? action.payload : anecdote
+      return state.map(blog =>
+        blog.id === action.payload.id ? action.payload : blog
       )
+    },
+    removeBlog(state, action) {
+      return state.filter(blog => blog.id !== action.payload)
     },
   },
 })
 
-export const { appendBlog, setBlogs, updateBlog } = blogSlice.actions
+export const { appendBlog, setBlogs, updateBlog, removeBlog } =
+  blogSlice.actions
 
 export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
     dispatch(setBlogs(blogs))
-  }
-}
-
-export const createBlog = ({ title, author, url }) => {
-  return async dispatch => {
-    try {
-      const newBlog = await blogService.create({ title, author, url })
-      dispatch(appendBlog(newBlog))
-      dispatch(
-        setNotification(
-          `New blog '${newBlog.title}' by ${newBlog.author} added`,
-          true,
-          5
-        )
-      )
-      // blogFormRef.current.toggleVisibility()
-      return newBlog
-    } catch (err) {
-      dispatch(setNotification('Adding blog failed.', false, 5))
-      return null
-    }
   }
 }
 
@@ -60,6 +43,20 @@ export const likeBlog = ({ id, user, likes, author, title, url }) => {
     } catch (err) {
       dispatch(setNotification('Liking blog failed.', false, 5))
       return null
+    }
+  }
+}
+
+export const deleteBlog = ({ id, title, author }) => {
+  return async dispatch => {
+    if (window.confirm(`Do you want to delete ${title} by ${author}?`)) {
+      try {
+        await blogService.remove(id)
+        dispatch(removeBlog(id))
+        dispatch(setNotification(`Blog ${title} deleted.`, true, 5))
+      } catch (err) {
+        dispatch(setNotification('Deleting blog failed.', false, 5))
+      }
     }
   }
 }

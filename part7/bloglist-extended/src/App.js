@@ -10,16 +10,14 @@ import Togglable from './components/Togglable'
 import { Container, Typography, Paper } from '@mui/material'
 import loginService from './services/loginService'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs, setBlogs } from './reducers/blogReducer'
+import { initializeBlogs, appendBlog } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   const [user, setUser] = useState(null)
-
-  const dispatch = useDispatch()
-
   const blogs = useSelector(state => state.blogs)
 
+  const dispatch = useDispatch()
   const blogFormRef = useRef()
 
   // Get all blogs from backend
@@ -59,18 +57,23 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
-  const deleteBlog = async ({ id, title, author }) => {
-    if (window.confirm(`Do you want to delete ${title} by ${author}?`)) {
-      try {
-        const response = await blogService.remove(id)
-        dispatch(setBlogs(blogs.filter(b => b.id !== id)))
-        dispatch(setNotification(`Blog ${title} deleted.`, true, 5))
-        return response.data
-      } catch (err) {
-        dispatch(setNotification('Deleting blog failed.', false, 5))
-      }
+  const createBlog = async ({ title, author, url }) => {
+    try {
+      const newBlog = await blogService.create({ title, author, url })
+      dispatch(appendBlog(newBlog))
+      dispatch(
+        setNotification(
+          `New blog '${newBlog.title}' by ${newBlog.author} added`,
+          true,
+          5
+        )
+      )
+      blogFormRef.current.toggleVisibility()
+      return newBlog
+    } catch (err) {
+      dispatch(setNotification('Adding blog failed.', false, 5))
+      return null
     }
-    return null
   }
 
   return (
@@ -93,13 +96,9 @@ const App = () => {
       {user && (
         <>
           <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
-            <CreateBlogForm />
+            <CreateBlogForm createBlog={createBlog} />
           </Togglable>
-          <BlogList
-            blogs={blogs}
-            user={user}
-            deleteBlog={deleteBlog}
-          />
+          <BlogList blogs={blogs} user={user} />
         </>
       )}
     </Container>
