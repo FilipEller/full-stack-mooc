@@ -71,7 +71,7 @@ const App = () => {
                 <>
                   {user && (
                     <>
-                      <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
+                      <Togglable buttonLabel='Add a Blog' ref={blogFormRef}>
                         <CreateBlogForm createBlog={createBlog} />
                       </Togglable>
                       <BlogList />
