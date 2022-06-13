@@ -7,6 +7,10 @@ router.post('/', async (req, res, next) => {
   const { content, blog: blogId } = req.body
   const blog = await Blog.findById(blogId)
 
+  if (!blog) {
+    return res.status(400).json({ error: 'invalid blog ID' })
+  }
+
   const commentToCreate = new Comment({
     content,
     blog: blog._id,
