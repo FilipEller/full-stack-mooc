@@ -1,7 +1,7 @@
 import React from 'react'
 import { useMatch } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper, Grid, Button, Box } from '@mui/material'
+import { Button } from '@mui/material'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 
 const BlogView = () => {

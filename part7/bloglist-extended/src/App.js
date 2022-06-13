@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import blogService from './services/blogService'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
-import UserInfo from './components/UserInfo'
+import Navbar from './components/Navbar'
 import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -12,7 +12,7 @@ import { initializeBlogs, appendBlog } from './reducers/blogReducer'
 import { initializeLoggedInUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUsers } from './reducers/usersReducer'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import UserList from './components/UserList'
 import UserView from './components/UserView'
 import BlogView from './components/BlogView'
@@ -57,21 +57,20 @@ const App = () => {
 
   return (
     <Container maxWidth='sm'>
+      {user && <Navbar />}
+      <Notification />
       <Typography variant='h1' gutterBottom component='div'>
         Blogs
       </Typography>
-      <Notification />
-      <Paper
-        elevation={2}
-        sx={{
-          p: 3,
-        }}>
-        {user ? <UserInfo /> : <LoginForm />}
-      </Paper>
-      <div>
-        <Link to='/'>Blogs</Link>
-        <Link to='/users'>Users</Link>
-      </div>
+      {!user && (
+        <Paper
+          elevation={2}
+          sx={{
+            p: 3,
+          }}>
+          <LoginForm />
+        </Paper>
+      )}
 
       <Routes>
         <Route
