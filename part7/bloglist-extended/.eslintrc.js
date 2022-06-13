@@ -24,6 +24,7 @@ module.exports = {
     'object-curly-bracing': 0,
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'no-unused-vars': 'warn',
   },
   settings: {
     react: {

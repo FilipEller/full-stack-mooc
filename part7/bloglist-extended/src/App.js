@@ -12,6 +12,8 @@ import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, appendBlog } from './reducers/blogReducer'
 import { initializeLoggedInUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import { Routes, Route, Link } from 'react-router-dom'
+import UserList from './components/UserList'
 
 const App = () => {
   const user = useSelector(state => state.user)
@@ -60,14 +62,29 @@ const App = () => {
         }}>
         {user ? <UserInfo /> : <LoginForm />}
       </Paper>
-      {user && (
-        <>
-          <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
-            <CreateBlogForm createBlog={createBlog} />
-          </Togglable>
-          <BlogList />
-        </>
-      )}
+      <div>
+        <Link to='/'>Blogs</Link>
+        <Link to='/users'>Users</Link>
+      </div>
+
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <>
+              {user && (
+                <>
+                  <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
+                    <CreateBlogForm createBlog={createBlog} />
+                  </Togglable>
+                  <BlogList />
+                </>
+              )}
+            </>
+          }
+        />
+        <Route path='/users' element={<UserList />} />
+      </Routes>
     </Container>
   )
 }
