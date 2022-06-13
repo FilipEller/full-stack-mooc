@@ -30,6 +30,18 @@ const BlogView = () => {
           Like
         </Button>
       </div>
+      {blog.comments.length > 0 ? (
+        <div>
+          <h4>Comments</h4>
+          <ul>
+            {blog.comments.map(comment => (
+              <li key={comment.id}>{comment.content}</li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div>No comments</div>
+      )}
       {user.username === blog.user.username && (
         <div>
           <Button
