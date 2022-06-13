@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react'
-
 import blogService from './services/blogService'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
@@ -12,11 +11,13 @@ import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, appendBlog } from './reducers/blogReducer'
 import { initializeLoggedInUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import { fetchUsers } from './reducers/usersReducer'
 import { Routes, Route, Link } from 'react-router-dom'
 import UserList from './components/UserList'
+import UserView from './components/UserView'
 
 const App = () => {
-  const user = useSelector(state => state.user)
+  const [user, blogs] = useSelector(state => [state.user, state.blogs])
 
   const dispatch = useDispatch()
   const blogFormRef = useRef()
@@ -29,6 +30,10 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeLoggedInUser())
   }, [dispatch])
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  }, [dispatch, blogs])
 
   const createBlog = async ({ title, author, url }) => {
     try {
@@ -84,6 +89,7 @@ const App = () => {
           }
         />
         <Route path='/users' element={<UserList />} />
+        <Route path='/users/:id' element={<UserView />} />
       </Routes>
     </Container>
   )
