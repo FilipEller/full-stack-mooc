@@ -36,13 +36,5 @@
   },
   "jest": {
     "testEnvironment": "node"
-  },
-  "prettier": {
-    "singleQuote": true,
-    "semi": true,
-    "bracketSameLine": true,
-    "arrowParens": "avoid",
-    "jsxSingleQuote": true,
-    "endOfLine": "lf"
   }
 }

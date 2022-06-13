@@ -13,10 +13,11 @@ router.post('/', userExtractor, async (req, res, next) => {
     url,
     likes,
     user: user._id,
+    comments: [],
   })
 
   const saved = await blogToCreate.save()
-  const result = await saved.populate('user', { username: 1, name: 1 })
+  const result = await saved.populate('blog', { title: 1, url: 1 })
 
   user.blogs = user.blogs.concat(result._id)
   await user.save()
@@ -26,7 +27,9 @@ router.post('/', userExtractor, async (req, res, next) => {
 
 // READ ALL
 router.get('/', async (req, res, next) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { content: 1 })
   res.json(blogs)
 })
 
