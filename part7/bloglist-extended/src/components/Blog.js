@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { Paper, Grid, Button, Box } from '@mui/material'
 import PropTypes from 'prop-types'
+import { likeBlog } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
+const Blog = ({ blog, user, deleteBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
+  const dispatch = useDispatch()
 
   const gridStyle = {
     display: 'flex',
@@ -38,7 +41,7 @@ const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
                 <div>User: {blog.user.username}</div>
                 <div>
                   Likes: {blog.likes}{' '}
-                  <Button size='small' onClick={() => likeBlog(blog)}>
+                  <Button size='small' onClick={() => dispatch(likeBlog(blog))}>
                     Like
                   </Button>
                 </div>
@@ -71,7 +74,6 @@ const Blog = ({ blog, likeBlog, user, deleteBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  likeBlog: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   deleteBlog: PropTypes.func.isRequired,
 }

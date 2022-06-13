@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-import blogService from './services/blogs'
+import blogService from './services/blogService'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import UserInfo from './components/UserInfo'
@@ -8,24 +8,24 @@ import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { Container, Typography, Paper } from '@mui/material'
-import loginService from './services/login'
+import loginService from './services/loginService'
 import { setNotification } from './reducers/notificationReducer'
-import { useDispatch } from 'react-redux'
+import { initializeBlogs, setBlogs } from './reducers/blogReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
+
+  const blogs = useSelector(state => state.blogs)
 
   const blogFormRef = useRef()
 
   // Get all blogs from backend
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      setBlogs(blogs)
-    })
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -59,43 +59,11 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
-  const createBlog = async ({ title, author, url }) => {
-    try {
-      const newBlog = await blogService.create({ title, author, url })
-      setBlogs(blogs.concat(newBlog))
-      dispatch(
-        setNotification(
-          `New blog '${newBlog.title}' by ${newBlog.author} added`,
-          true,
-          5
-        )
-      )
-      blogFormRef.current.toggleVisibility()
-      return newBlog
-    } catch (err) {
-      dispatch(setNotification('Adding blog failed.', false, 5))
-      return null
-    }
-  }
-
-  const likeBlog = async ({ id, user, likes, author, title, url }) => {
-    try {
-      const blog = { user: user.id, likes: likes + 1, author, title, url }
-      const newBlog = await blogService.update(id, blog)
-      setBlogs(
-        blogs.map(b => (b.id === newBlog.id ? { ...b, likes: likes + 1 } : b))
-      )
-    } catch (err) {
-      dispatch(setNotification('Liking blog failed.', false, 5))
-      return null
-    }
-  }
-
   const deleteBlog = async ({ id, title, author }) => {
     if (window.confirm(`Do you want to delete ${title} by ${author}?`)) {
       try {
         const response = await blogService.remove(id)
-        setBlogs(blogs.filter(b => b.id !== id))
+        dispatch(setBlogs(blogs.filter(b => b.id !== id)))
         dispatch(setNotification(`Blog ${title} deleted.`, true, 5))
         return response.data
       } catch (err) {
@@ -125,11 +93,10 @@ const App = () => {
       {user && (
         <>
           <Togglable buttonLabel='Add a blog' ref={blogFormRef}>
-            <CreateBlogForm createBlog={createBlog} />
+            <CreateBlogForm />
           </Togglable>
           <BlogList
             blogs={blogs}
-            likeBlog={likeBlog}
             user={user}
             deleteBlog={deleteBlog}
           />

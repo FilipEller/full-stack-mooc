@@ -7,15 +7,19 @@ import {
   InputLabel,
   Input,
 } from '@mui/material'
+import { createBlog } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
-const CreateBlogForm = ({ createBlog }) => {
+const CreateBlogForm = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const dispatch = useDispatch()
+
   const onSubmit = async event => {
     event.preventDefault()
-    const data = await createBlog({ title, author, url })
+    const data = await dispatch(createBlog({ title, author, url }))
     if (data) {
       setTitle('')
       setAuthor('')

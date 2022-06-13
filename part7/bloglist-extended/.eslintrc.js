@@ -14,7 +14,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', 'jest', 'cypress'],
+  plugins: ['react', 'jest', 'cypress', 'react-hooks'],
   rules: {
     'linebreak-style': ['error', 'unix'],
     eqeqeq: 'error',
@@ -22,6 +22,8 @@ module.exports = {
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 'off',
     'object-curly-bracing': 0,
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
   settings: {
     react: {
