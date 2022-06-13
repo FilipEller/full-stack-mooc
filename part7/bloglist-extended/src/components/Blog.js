@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
   const [showDetails, setShowDetails] = useState(false)
@@ -31,7 +32,9 @@ const Blog = ({ blog }) => {
         <Grid item xs={7}>
           <div>
             <div>
-              <i>{blog.title}</i>
+              <Link to={`/blogs/${blog.id}`}>
+                <i>{blog.title}</i>
+              </Link>
             </div>
             {showDetails && (
               <Box sx={{ '& div': { mt: 1 } }}>

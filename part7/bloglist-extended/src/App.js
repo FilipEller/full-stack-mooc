@@ -15,6 +15,7 @@ import { fetchUsers } from './reducers/usersReducer'
 import { Routes, Route, Link } from 'react-router-dom'
 import UserList from './components/UserList'
 import UserView from './components/UserView'
+import BlogView from './components/BlogView'
 
 const App = () => {
   const [user, blogs] = useSelector(state => [state.user, state.blogs])
@@ -90,6 +91,7 @@ const App = () => {
         />
         <Route path='/users' element={<UserList />} />
         <Route path='/users/:id' element={<UserView />} />
+        <Route path='/blogs/:id' element={<BlogView />} />
       </Routes>
     </Container>
   )
