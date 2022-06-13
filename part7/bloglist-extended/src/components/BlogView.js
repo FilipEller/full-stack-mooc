@@ -2,7 +2,7 @@ import React from 'react'
 import { useMatch } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button } from '@mui/material'
-import { likeBlog, deleteBlog } from '../reducers/blogReducer'
+import { likeBlog, deleteBlog, commentOnBlog } from '../reducers/blogReducer'
 
 const BlogView = () => {
   const match = useMatch('/blogs/:id')
@@ -10,6 +10,13 @@ const BlogView = () => {
   const blog = match ? blogs.find(blog => blog.id === match.params.id) : null
 
   const dispatch = useDispatch()
+
+  const addComment = async event => {
+    event.preventDefault()
+    const content = event.target.content.value
+    event.target.content.value = ''
+    dispatch(commentOnBlog({ content, blog }))
+  }
 
   if (!blog) {
     return
@@ -30,18 +37,18 @@ const BlogView = () => {
           Like
         </Button>
       </div>
-      {blog.comments.length > 0 ? (
-        <div>
-          <h4>Comments</h4>
-          <ul>
-            {blog.comments.map(comment => (
-              <li key={comment.id}>{comment.content}</li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div>No comments</div>
-      )}
+      <div>
+        <h4>Comments</h4>
+        <form onSubmit={addComment}>
+          <input name='content'></input>
+          <button>Add comment</button>
+        </form>
+        <ul>
+          {blog.comments.map(comment => (
+            <li key={comment.id}>{comment.content}</li>
+          ))}
+        </ul>
+      </div>
       {user.username === blog.user.username && (
         <div>
           <Button

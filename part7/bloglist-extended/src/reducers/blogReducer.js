@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogService'
+import commentService from '../services/commentService'
 import { setNotification } from './notificationReducer'
 
 const blogSlice = createSlice({
@@ -57,6 +58,20 @@ export const deleteBlog = ({ id, title, author }) => {
       } catch (err) {
         dispatch(setNotification('Deleting blog failed.', false, 5))
       }
+    }
+  }
+}
+
+export const commentOnBlog = ({ content, blog }) => {
+  return async dispatch => {
+    try {
+      const newComment = await commentService.create({ content, blog: blog.id })
+      dispatch(
+        updateBlog({ ...blog, comments: blog.comments.concat(newComment) })
+      )
+      dispatch(setNotification(`You commented '${content}'`, true, 5))
+    } catch (err) {
+      dispatch(setNotification('Commenting failed.', false, 5))
     }
   }
 }
