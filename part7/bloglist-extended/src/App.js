@@ -9,12 +9,14 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { Container, Typography, Paper } from '@mui/material'
 import loginService from './services/login'
+import { setNotification } from './reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
-  const [success, setSuccess] = useState(false)
+
+  const dispatch = useDispatch()
 
   const blogFormRef = useRef()
 
@@ -47,11 +49,7 @@ const App = () => {
       setUser(user)
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
     } catch (err) {
-      setMessage('Incorrect username or password.')
-      setSuccess(false)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(setNotification('Incorrect username or password.', false, 5))
     }
   }
 
@@ -65,19 +63,17 @@ const App = () => {
     try {
       const newBlog = await blogService.create({ title, author, url })
       setBlogs(blogs.concat(newBlog))
-      setMessage(`New blog '${newBlog.title}' by ${newBlog.author} added`)
-      setSuccess(true)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(
+        setNotification(
+          `New blog '${newBlog.title}' by ${newBlog.author} added`,
+          true,
+          5
+        )
+      )
       blogFormRef.current.toggleVisibility()
       return newBlog
     } catch (err) {
-      setMessage('Adding blog failed.')
-      setSuccess(false)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(setNotification('Adding blog failed.', false, 5))
       return null
     }
   }
@@ -90,11 +86,7 @@ const App = () => {
         blogs.map(b => (b.id === newBlog.id ? { ...b, likes: likes + 1 } : b))
       )
     } catch (err) {
-      setMessage('Liking blog failed.')
-      setSuccess(false)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(setNotification('Liking blog failed.', false, 5))
       return null
     }
   }
@@ -104,13 +96,10 @@ const App = () => {
       try {
         const response = await blogService.remove(id)
         setBlogs(blogs.filter(b => b.id !== id))
+        dispatch(setNotification(`Blog ${title} deleted.`, true, 5))
         return response.data
       } catch (err) {
-        setMessage('Deleting blog failed.')
-        setSuccess(false)
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
+        dispatch(setNotification('Deleting blog failed.', false, 5))
       }
     }
     return null
@@ -121,7 +110,7 @@ const App = () => {
       <Typography variant='h1' gutterBottom component='div'>
         Blogs
       </Typography>
-      {message && <Notification message={message} success={success} />}
+      <Notification />
       <Paper
         elevation={2}
         sx={{
