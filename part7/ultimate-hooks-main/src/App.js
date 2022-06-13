@@ -18,16 +18,15 @@ const useField = type => {
 const useResource = baseUrl => {
   const [resources, setResources] = useState([])
 
-  const readAll = async () => {
-    try {
-      const response = await axios.get(baseUrl)
-      setResources(response.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   useEffect(() => {
+    const readAll = async () => {
+      try {
+        const response = await axios.get(baseUrl)
+        setResources(response.data)
+      } catch (e) {
+        console.log(e)
+      }
+    }
     readAll()
   }, [baseUrl])
 
