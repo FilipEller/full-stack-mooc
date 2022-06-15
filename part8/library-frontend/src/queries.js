@@ -35,6 +35,7 @@ export const CREATE_BOOK = gql`
     ) {
       title
       author
+      published
     }
   }
 `
