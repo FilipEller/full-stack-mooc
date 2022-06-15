@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.17.0"
+    "eslint": "^8.17.0",
+    "nodemon": "^2.0.16"
   },
   "dependencies": {
     "apollo-server": "^3.8.2",
