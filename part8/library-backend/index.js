@@ -61,9 +61,6 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      const byGenre = book => book.genres.includes(args.genre)
-      const byAuthor = book => book.author.name === args.author
-
       if (args.genre && args.author) {
         const author = await Author.find({ name: args.author })
         return Book.find({ genres: args.genre, author: author }).populate(
