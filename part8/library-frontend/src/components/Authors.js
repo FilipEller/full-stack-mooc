@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useQuery } from '@apollo/client'
-import { ALL_AUTHORS } from '../queries.js'
+import { useQuery, useMutation } from '@apollo/client'
+import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries.js'
 
 const Authors = props => {
   const [name, setName] = useState('')
@@ -8,13 +8,23 @@ const Authors = props => {
 
   const { loading, data } = useQuery(ALL_AUTHORS)
 
+  const [editAuthor] = useMutation(EDIT_AUTHOR, {
+    onError: error => {
+      console.log(error.graphQLErrors)
+    },
+  })
+
   if (!props.show) {
     return null
   }
 
   const submit = event => {
     event.preventDefault()
-    console.log('submitted')
+
+    editAuthor({ variables: { name, setBornTo: parseInt(year) } })
+
+    setName('')
+    setYear('')
   }
 
   return (
@@ -54,14 +64,14 @@ const Authors = props => {
           />
         </div>
         <div>
-          published
+          year
           <input
             type='number'
             value={year}
             onChange={({ target }) => setYear(target.value)}
           />
         </div>
-        <button type='submit'>create book</button>
+        <button type='submit'>Update author</button>
       </form>
     </div>
   )
