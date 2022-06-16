@@ -101,15 +101,21 @@ const resolvers = {
       }
     },
     editAuthor: async (root, args) => {
-      const author = await Author.findOne({ name: args.name })
-      if (!author) {
-        return null
+      try {
+        const author = await Author.findOne({ name: args.name })
+        if (!author) {
+          return null
+        }
+
+        author.born = args.setBornTo
+        await author.save()
+
+        return author
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
-
-      author.born = args.setBornTo
-      await author.save()
-
-      return author
     },
   },
 }
