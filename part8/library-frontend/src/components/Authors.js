@@ -4,7 +4,7 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries.js'
 
 const Authors = props => {
   const [name, setName] = useState('')
-  const [year, setYear] = useState('')
+  const [year, setYear] = useState('2000')
 
   const { loading, data } = useQuery(ALL_AUTHORS)
 
@@ -24,7 +24,7 @@ const Authors = props => {
     editAuthor({ variables: { name, setBornTo: parseInt(year) } })
 
     setName('')
-    setYear('')
+    setYear('2000')
   }
 
   return (
@@ -57,14 +57,22 @@ const Authors = props => {
       <h3>Set birth year</h3>
       <form onSubmit={submit}>
         <div>
-          name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+          Name:
+          <select value={name} onChange={({ target }) => setName(target.value)}>
+            <option value=''></option>
+            {!loading ? (
+              data.allAuthors.map(a => (
+                <option key={a.id} value={a.name}>
+                  {a.name}
+                </option>
+              ))
+            ) : (
+              <></>
+            )}
+          </select>
         </div>
         <div>
-          year
+          Year:
           <input
             type='number'
             value={year}
