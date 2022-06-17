@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries.js'
 
-const Authors = props => {
+const Authors = ({ show, token }) => {
   const [name, setName] = useState('')
   const [year, setYear] = useState('2000')
 
@@ -10,11 +10,11 @@ const Authors = props => {
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     onError: error => {
-      console.log(error.graphQLErrors)
+      console.log(error.graphQLErrors[0].message)
     },
   })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -54,33 +54,39 @@ const Authors = props => {
           )}
         </tbody>
       </table>
-      <h3>Set birth year</h3>
-      <form onSubmit={submit}>
-        <div>
-          Name:
-          <select value={name} onChange={({ target }) => setName(target.value)}>
-            <option value=''></option>
-            {!loading ? (
-              data.allAuthors.map(a => (
-                <option key={a.id} value={a.name}>
-                  {a.name}
-                </option>
-              ))
-            ) : (
-              <></>
-            )}
-          </select>
-        </div>
-        <div>
-          Year:
-          <input
-            type='number'
-            value={year}
-            onChange={({ target }) => setYear(target.value)}
-          />
-        </div>
-        <button type='submit'>Update author</button>
-      </form>
+      {token && (
+        <>
+          <h3>Set birth year</h3>
+          <form onSubmit={submit}>
+            <div>
+              Name:
+              <select
+                value={name}
+                onChange={({ target }) => setName(target.value)}>
+                <option value=''></option>
+                {!loading ? (
+                  data.allAuthors.map(a => (
+                    <option key={a.id} value={a.name}>
+                      {a.name}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </select>
+            </div>
+            <div>
+              Year:
+              <input
+                type='number'
+                value={year}
+                onChange={({ target }) => setYear(target.value)}
+              />
+            </div>
+            <button type='submit'>Update author</button>
+          </form>
+        </>
+      )}
     </div>
   )
 }
