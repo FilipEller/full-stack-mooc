@@ -159,18 +159,24 @@ const resolvers = {
         id: user._id,
       }
 
-      return { token: jwt.sign(userForToken, SECRET) }
+      return { value: jwt.sign(userForToken, SECRET) }
     },
   },
 }
 
 const context = async ({ req }) => {
-  const token = req.headers.authorization || ''
+  try {
+    const token = req.headers.authorization || ''
 
-  if (token.toLowerCase().startsWith('bearer ')) {
-    const decodedToken = jwt.verify(token.substring(7), SECRET)
-    const currentUser = await User.findById(decodedToken.id)
-    return { currentUser }
+    if (token.toLowerCase().startsWith('bearer ')) {
+      const decodedToken = jwt.verify(token.substring(7), SECRET)
+      const currentUser = await User.findById(decodedToken.id)
+      return { currentUser }
+    }
+  } catch (error) {
+    throw new UserInputError(error.message, {
+      invalidArgs: req.headers.authorization,
+    })
   }
 }
 
