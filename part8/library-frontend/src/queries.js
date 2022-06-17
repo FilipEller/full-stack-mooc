@@ -24,6 +24,23 @@ export const ALL_BOOKS = gql`
   }
 `
 
+export const ALL_BOOKS_AND_ME = gql`
+  query {
+    allBooks {
+      title
+      author {
+        name
+      }
+      published
+      genres
+      id
+    }
+    me {
+      favouriteGenre
+    }
+  }
+`
+
 export const CREATE_BOOK = gql`
   mutation createBook(
     $title: String!
