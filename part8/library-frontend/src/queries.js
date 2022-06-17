@@ -18,6 +18,7 @@ export const ALL_BOOKS = gql`
         name
       }
       published
+      genres
       id
     }
   }
@@ -41,6 +42,7 @@ export const CREATE_BOOK = gql`
         name
       }
       published
+      genres
       id
     }
   }
