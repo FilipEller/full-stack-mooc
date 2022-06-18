@@ -4,11 +4,17 @@ import Books from './components/Books'
 import Recommended from './components/Recommended'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
-import { useApolloClient } from '@apollo/client'
+import { useQuery, useApolloClient } from '@apollo/client'
+import { ALL_BOOKS } from './queries.js'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState('')
+  const { data } = useQuery(ALL_BOOKS)
+
+  const books = data ? data.allBooks : []
+  const genres = [...new Set(books.flatMap(b => b.genres))]
+
   const client = useApolloClient()
 
   useEffect(() => {
@@ -43,7 +49,7 @@ const App = () => {
 
       <Authors show={page === 'authors'} token={token} />
 
-      <Books show={page === 'books'} />
+      <Books show={page === 'books'} genres={genres} />
       <Recommended show={page === 'recommended'} />
 
       <NewBook show={page === 'add'} />

@@ -1,17 +1,20 @@
+import { useEffect } from 'react'
 import { useQuery } from '@apollo/client'
-import { ACCOUNT, BOOKS_BY_GENRE } from '../queries.js'
+import { ACCOUNT, ALL_BOOKS } from '../queries.js'
 
-const Recommended = props => {
-  const { data: accountData } = useQuery(ACCOUNT, {
-    refetchQueries: [{ query: BOOKS_BY_GENRE }],
-  })
+const Recommended = ({ show }) => {
+  const { data: accountData } = useQuery(ACCOUNT)
 
   const filter = accountData ? accountData.me.favouriteGenre : null
 
-  const { data: booksData } = useQuery(BOOKS_BY_GENRE, {
+  const { data: booksData, refetch } = useQuery(ALL_BOOKS, {
     variables: { genre: accountData && accountData.me.favouriteGenre },
     skip: !accountData,
   })
+
+  useEffect(() => {
+    refetch()
+  }, [show]) // eslint-disable-line
 
   const books = booksData ? booksData.allBooks : []
 
@@ -19,7 +22,7 @@ const Recommended = props => {
     ? books.filter(b => b.genres.includes(filter))
     : books*/
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
