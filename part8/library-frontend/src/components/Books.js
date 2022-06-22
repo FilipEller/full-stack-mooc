@@ -1,19 +1,32 @@
+import { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries.js'
 
-const Books = props => {
-  const { loading, data } = useQuery(ALL_BOOKS)
+const Books = ({ show, genres }) => {
+  const [filter, setFilter] = useState('')
 
-  if (!props.show) {
+  const { data, refetch } = useQuery(ALL_BOOKS, {
+    variables: filter ? { genre: filter } : {},
+  })
+
+  useEffect(() => {
+    refetch()
+  }, [filter, show]) // eslint-disable-line
+
+  if (!show) {
     return null
   }
 
-  const books = !loading ? data.allBooks : []
+  const filteredBooks = data ? data.allBooks : []
 
   return (
     <div>
       <h2>Books</h2>
-
+      {filter && (
+        <p>
+          In genre <b>{filter}</b>
+        </p>
+      )}
       <table>
         <tbody>
           <tr>
@@ -21,15 +34,21 @@ const Books = props => {
             <th>Author</th>
             <th>Published</th>
           </tr>
-          {books.map(a => (
-            <tr key={a.id}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
+          {filteredBooks.map(b => (
+            <tr key={b.id}>
+              <td>{b.title}</td>
+              <td>{b.author.name}</td>
+              <td>{b.published}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      {genres.map(g => (
+        <button key={g} onClick={() => setFilter(g)}>
+          {g}
+        </button>
+      ))}
+      <button onClick={() => setFilter('')}>All genres</button>
     </div>
   )
 }
