@@ -1,6 +1,12 @@
-const Author = require('./models/Author')
-const Book = require('./models/Book')
-const { UserInputError } = require('apollo-server')
+const { UserInputError, AuthenticationError } = require('apollo-server')
+const Author = require('../models/Author')
+const Book = require('../models/Book')
+const User = require('../models/User')
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
+
+const jwt = require('jsonwebtoken')
+const { SECRET } = require('./config')
 
 const resolvers = {
   Author: {
@@ -29,9 +35,17 @@ const resolvers = {
       return Book.find({}).populate('author')
     },
     allAuthors: async () => Author.find({}),
+    me: (root, args, context) => {
+      return context.currentUser
+    },
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new AuthenticationError('not authenticated')
+      }
+
       try {
         const { title, published, author, genres } = args
 
@@ -45,6 +59,8 @@ const resolvers = {
         await authorObj.save()
         await book.save()
 
+        pubsub.publish('BOOK_ADDED', { bookAdded: book.populate('author') })
+
         return book.populate('author')
       } catch (error) {
         throw new UserInputError(error.message, {
@@ -52,7 +68,12 @@ const resolvers = {
         })
       }
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new AuthenticationError('not authenticated')
+      }
+
       try {
         const author = await Author.findOne({ name: args.name })
         if (!author) {
@@ -68,6 +89,38 @@ const resolvers = {
           invalidArgs: args,
         })
       }
+    },
+    createUser: async (root, args) => {
+      try {
+        const user = new User({
+          username: args.username,
+          favouriteGenre: args.favouriteGenre,
+        })
+        return user.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
+
+      if (!(user && args.password === 'secret')) {
+        throw new UserInputError('Invalid credentials')
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      return { value: jwt.sign(userForToken, SECRET) }
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']),
     },
   },
 }

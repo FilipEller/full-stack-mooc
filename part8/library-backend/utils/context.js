@@ -1,6 +1,6 @@
 const { UserInputError } = require('apollo-server')
-const { SECRET } = require('./utils/config')
-const User = require('./models/User')
+const { SECRET } = require('./config')
+const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 
 const context = async ({ req }) => {
