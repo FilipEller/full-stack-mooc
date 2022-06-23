@@ -6,7 +6,7 @@ const Authors = ({ show, token }) => {
   const [name, setName] = useState('')
   const [year, setYear] = useState('2000')
 
-  const { loading, data } = useQuery(ALL_AUTHORS)
+  const { data } = useQuery(ALL_AUTHORS, { skip: !show })
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     onError: error => {
@@ -37,13 +37,7 @@ const Authors = ({ show, token }) => {
             <th>Born</th>
             <th>Books</th>
           </tr>
-          {loading ? (
-            <tr>
-              <td>loading...</td>
-              <td></td>
-              <td></td>
-            </tr>
-          ) : (
+          {data ? (
             data.allAuthors.map(a => (
               <tr key={a.name}>
                 <td>{a.name}</td>
@@ -51,6 +45,12 @@ const Authors = ({ show, token }) => {
                 <td>{a.bookCount}</td>
               </tr>
             ))
+          ) : (
+            <tr>
+              <td>loading...</td>
+              <td></td>
+              <td></td>
+            </tr>
           )}
         </tbody>
       </table>
@@ -64,7 +64,7 @@ const Authors = ({ show, token }) => {
                 value={name}
                 onChange={({ target }) => setName(target.value)}>
                 <option value=''></option>
-                {!loading ? (
+                {data ? (
                   data.allAuthors.map(a => (
                     <option key={a.id} value={a.name}>
                       {a.name}

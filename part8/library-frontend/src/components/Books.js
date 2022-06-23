@@ -1,17 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries.js'
 
-const Books = ({ show, genres }) => {
-  const [filter, setFilter] = useState('')
-
+const Books = ({ show, genres, filter, setFilter }) => {
   const { data, refetch } = useQuery(ALL_BOOKS, {
     variables: filter ? { genre: filter } : {},
+    //skip: !show,
   })
 
   useEffect(() => {
     refetch()
-  }, [filter, show]) // eslint-disable-line
+  }, [filter]) // eslint-disable-line
 
   if (!show) {
     return null

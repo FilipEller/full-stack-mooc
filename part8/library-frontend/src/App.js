@@ -4,12 +4,13 @@ import Books from './components/Books'
 import Recommended from './components/Recommended'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
-import { useQuery, useApolloClient } from '@apollo/client'
-import { ALL_BOOKS } from './queries.js'
+import { useQuery, useSubscription, useApolloClient } from '@apollo/client'
+import { ALL_BOOKS, BOOK_ADDED, ACCOUNT } from './queries.js'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState('')
+  const [filter, setFilter] = useState('')
   const { data } = useQuery(ALL_BOOKS)
 
   const books = data ? data.allBooks : []
@@ -23,6 +24,42 @@ const App = () => {
       setToken(token)
     }
   }, [])
+
+  const { data: accountData } = useQuery(ACCOUNT)
+  const favouriteGenre =
+    accountData && accountData.me ? accountData.me.favouriteGenre : null
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      console.log(filter)
+      console.log(favouriteGenre)
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => ({
+        allBooks: allBooks.concat(addedBook),
+      }))
+      client.cache.updateQuery(
+        {
+          query: ALL_BOOKS,
+          variables: favouriteGenre ? { genre: favouriteGenre } : {},
+        },
+        ({ allBooks }) => ({
+          allBooks: addedBook.genres.includes(favouriteGenre)
+            ? allBooks.concat(addedBook)
+            : allBooks,
+        })
+      )
+      client.cache.updateQuery(
+        { query: ALL_BOOKS, variables: filter ? { genre: filter } : {} },
+        ({ allBooks }) => ({
+          allBooks:
+            addedBook.genres.includes(filter) && filter !== favouriteGenre
+              ? allBooks.concat(addedBook)
+              : allBooks,
+        })
+      )
+      window.alert(`${addedBook.title} was added.`)
+    },
+  })
 
   const logOut = () => {
     setToken('')
@@ -49,10 +86,22 @@ const App = () => {
 
       <Authors show={page === 'authors'} token={token} />
 
-      <Books show={page === 'books'} genres={genres} />
-      <Recommended show={page === 'recommended'} />
+      <Books
+        show={page === 'books'}
+        genres={genres}
+        filter={filter}
+        setFilter={setFilter}
+      />
+      <Recommended
+        show={page === 'recommended'}
+        favouriteGenre={favouriteGenre}
+      />
 
-      <NewBook show={page === 'add'} />
+      <NewBook
+        show={page === 'add'}
+        filter={filter}
+        favouriteGenre={favouriteGenre}
+      />
 
       <Login show={page === 'login'} setToken={setToken} setPage={setPage} />
     </div>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { ALL_BOOKS, ALL_AUTHORS, ADD_BOOK } from '../queries.js'
 
-const NewBook = props => {
+const NewBook = ({ show, filter, favouriteGenre }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('2022')
@@ -12,19 +12,40 @@ const NewBook = props => {
   const [createBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_AUTHORS }],
     onError: error => {
-      console.log(error.graphQLErrors[0].message)
+      console.log(error.graphQLErrors)
     },
-    update: (cache, response) => {
-      // This only updates genres given by App to Books
+    /*update: (cache, response) => {
+      const addedBook = response.data.addBook
+
       cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
         return {
-          allBooks: allBooks.concat(response.data.addBook),
+          allBooks: allBooks.concat(addedBook),
         }
       })
-    },
+      cache.updateQuery(
+        { query: ALL_BOOKS, variables: { genre: filter } },
+        ({ allBooks }) => {
+          return {
+            allBooks: addedBook.genres.includes(filter)
+              ? allBooks.concat(addedBook)
+              : allBooks,
+          }
+        }
+      )
+      cache.updateQuery(
+        { query: ALL_BOOKS, variables: { genre: favouriteGenre } },
+        ({ allBooks }) => {
+          return {
+            allBooks: addedBook.genres.includes(favouriteGenre)
+              ? allBooks.concat(addedBook)
+              : allBooks,
+          }
+        }
+      )
+    },*/
   })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
