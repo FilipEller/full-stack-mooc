@@ -1,3 +1,5 @@
+import calculateBmi from './utils/calculateBmi';
+
 interface Data {
   height: number;
   weight: number;
@@ -15,19 +17,7 @@ const parseInput = (args: Array<string>): Data => {
   };
 };
 
-const calculateBmi = (height: number, weight: number): string => {
-  const bmi = weight / (height / 100) ** 2;
-  switch (true) {
-    case bmi < 18.5:
-      return 'Underweight (thinness)';
-    case bmi < 25:
-      return 'Normal (healthy weight)';
-    default:
-      return 'Overweight (obesity)';
-  }
-};
-
-export const main = () => {
+const main = () => {
   try {
     const { height, weight } = parseInput(process.argv);
     console.log(calculateBmi(height, weight));
