@@ -1,3 +1,8 @@
+interface ExerciseData {
+  target: number;
+  dailyExerciseHours: Array<number>;
+}
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -8,8 +13,24 @@ interface Result {
   average: number;
 }
 
-const calculateExercises = (dailyExerciseHours: Array<number>): Result => {
-  const target = 2;
+const parseArgs = (args: Array<string>): ExerciseData => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.slice(3).filter(x => isNaN(Number(x))).length > 0)
+    throw new Error('Invalid input. Arguments must be numbers.');
+
+  const target = Number(args[2]);
+  const dailyExerciseHours = args.slice(3).map(x => Number(x));
+
+  return {
+    target,
+    dailyExerciseHours,
+  };
+};
+
+const calculateExercises = (
+  target: number,
+  dailyExerciseHours: Array<number>
+): Result => {
   const periodLength = dailyExerciseHours.length;
   const trainingDays = dailyExerciseHours.filter(hours => hours > 0).length;
   const average =
@@ -48,4 +69,16 @@ const calculateExercises = (dailyExerciseHours: Array<number>): Result => {
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1]));
+const exerciseCalculator = () => {
+  try {
+    const { target, dailyExerciseHours } = parseArgs(process.argv);
+    console.log(calculateExercises(target, dailyExerciseHours));
+  } catch (error: unknown) {
+    console.log('Execution failed.');
+    if (error instanceof Error) {
+      console.log('Error:', error.message);
+    }
+  }
+};
+
+exerciseCalculator();
