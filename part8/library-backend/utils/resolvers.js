@@ -10,10 +10,7 @@ const { SECRET } = require('./config')
 
 const resolvers = {
   Author: {
-    bookCount: async root => {
-      const books = await Book.find({ author: root })
-      return books.length
-    },
+    bookCount: root => root.books.length,
   },
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
@@ -34,7 +31,7 @@ const resolvers = {
       }
       return Book.find({}).populate('author')
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => Author.find({}).populate('books'),
     me: (root, args, context) => {
       return context.currentUser
     },
@@ -56,6 +53,7 @@ const resolvers = {
           : new Author({ name: author })
 
         const book = new Book({ title, published, author: authorObj, genres })
+        authorObj.books = [...authorObj.books, book.id]
         await authorObj.save()
         await book.save()
 
