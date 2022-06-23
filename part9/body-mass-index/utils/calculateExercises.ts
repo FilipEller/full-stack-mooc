@@ -37,7 +37,7 @@ const calculateExercises = (
     }
   };
 
-  let { rating, ratingDescription } = getRating(average, target);
+  const { rating, ratingDescription } = getRating(average, target);
 
   return {
     periodLength,
@@ -50,4 +50,4 @@ const calculateExercises = (
   };
 };
 
-export default calculateExercises
+export default calculateExercises;

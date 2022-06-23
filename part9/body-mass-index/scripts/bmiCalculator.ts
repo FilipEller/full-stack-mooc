@@ -1,4 +1,4 @@
-import calculateBmi from './utils/calculateBmi';
+import calculateBmi from '../utils/calculateBmi';
 
 interface Data {
   height: number;

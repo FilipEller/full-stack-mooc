@@ -1,4 +1,4 @@
-import calculateExercises from './utils/calculateExercises'
+import calculateExercises from '../utils/calculateExercises';
 
 interface Data {
   target: number;
@@ -18,8 +18,6 @@ const parseInput = (args: Array<string>): Data => {
     dailyExerciseHours,
   };
 };
-
-
 
 const main = () => {
   try {
