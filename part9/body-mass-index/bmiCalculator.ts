@@ -27,7 +27,7 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 };
 
-const bmiCalculator = () => {
+export const main = () => {
   try {
     const { height, weight } = parseInput(process.argv);
     console.log(calculateBmi(height, weight));
@@ -39,4 +39,4 @@ const bmiCalculator = () => {
   }
 };
 
-bmiCalculator();
+main();

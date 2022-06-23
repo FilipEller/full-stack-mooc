@@ -1,4 +1,4 @@
-interface ExerciseData {
+interface Data {
   target: number;
   dailyExerciseHours: Array<number>;
 }
@@ -13,7 +13,7 @@ interface Result {
   average: number;
 }
 
-const parseArgs = (args: Array<string>): ExerciseData => {
+const parseInput = (args: Array<string>): Data => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.slice(3).filter(x => isNaN(Number(x))).length > 0)
     throw new Error('Invalid input. Arguments must be numbers.');
@@ -69,9 +69,9 @@ const calculateExercises = (
   };
 };
 
-const exerciseCalculator = () => {
+export const main = () => {
   try {
-    const { target, dailyExerciseHours } = parseArgs(process.argv);
+    const { target, dailyExerciseHours } = parseInput(process.argv);
     console.log(calculateExercises(target, dailyExerciseHours));
   } catch (error: unknown) {
     console.log('Execution failed.');
@@ -81,4 +81,4 @@ const exerciseCalculator = () => {
   }
 };
 
-exerciseCalculator();
+main();
