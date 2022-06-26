@@ -26,4 +26,5 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
+  ignorePatterns: ['build', 'node_modules'],
 };
