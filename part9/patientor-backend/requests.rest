@@ -1,0 +1,12 @@
+### BMI Calculator
+GET http://localhost:3001/api/patients
+Content-Type: application/json
+
+### Exercise Calculator
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Barack Obama",
+  "dateOfBirth": "1918-01-01"
+}

@@ -9,9 +9,18 @@ router.get('/', (_req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const newPatient = toNewPatient(req.body);
-  const patient = patientService.addPatient(newPatient);
-  res.json(patient);
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const newPatient = toNewPatient(req.body);
+    const patient = patientService.addPatient(newPatient);
+    res.json(patient);
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
 });
 
 export default router;
