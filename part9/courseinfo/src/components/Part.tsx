@@ -7,7 +7,7 @@ const Part = ({ coursePart }: { coursePart: CoursePart }) => {
     );
   };
 
-  const courseInfo = () => {
+  const partInfo = (coursePart: CoursePart) => {
     switch (coursePart.type) {
       case 'normal':
         return <i>{coursePart.description}</i>;
@@ -41,7 +41,7 @@ const Part = ({ coursePart }: { coursePart: CoursePart }) => {
           {coursePart.name} {coursePart.exerciseCount}
         </b>
         <br />
-        {courseInfo()}
+        {partInfo(coursePart)}
       </p>
     </div>
   );
