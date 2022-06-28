@@ -1,4 +1,4 @@
-export interface Diagnose {
+export interface Diagnosis {
   code: string;
   name: string;
   latin?: string;
@@ -17,9 +17,6 @@ type MM = `0${oneToNine}` | `1${0 | 1 | 2}`;
 type DD = `${0}${oneToNine}` | `${1 | 2}${zeroToNine}` | `3${0 | 1}`;
 export type Date = `${YYYY}-${MM}-${DD}`;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Entry {}
-
 export interface Patient {
   id: string;
   name: string;
@@ -37,5 +34,55 @@ export type NewPatientFields = {
   dateOfBirth: unknown;
   ssn: unknown;
   gender: unknown;
-  occupation: string;
+  occupation: unknown;
+  entries: unknown;
 };
+
+export enum EntryType {
+  Hospital = 'Hospital',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+  HealthCheck = 'HealthCheck',
+}
+
+export interface BaseEntry {
+  id: string;
+  type: EntryType;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<Diagnosis['code']>;
+}
+
+export enum HealthCheckRating {
+  'Healthy' = 0,
+  'LowRisk' = 1,
+  'HighRisk' = 2,
+  'CriticalRisk' = 3,
+}
+
+export interface HealthCheckEntry extends BaseEntry {
+  type: EntryType.HealthCheck;
+  healthCheckRating: HealthCheckRating;
+}
+
+export interface OccupationalHealthcareEntry extends BaseEntry {
+  type: EntryType.OccupationalHealthcare;
+  employerName: string;
+  sickLeave?: {
+    startDate: Date;
+    endDate: Date;
+  };
+}
+
+export interface HospitalEntry extends BaseEntry {
+  type: EntryType.Hospital;
+  discharge: {
+    date: Date;
+    criteria: string;
+  };
+}
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
