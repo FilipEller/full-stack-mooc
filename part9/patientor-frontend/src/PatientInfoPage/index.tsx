@@ -13,7 +13,7 @@ import TransgenderIcon from '@mui/icons-material/Transgender';
 const PatientInfoPage = () => {
   const [patient, setPatient] = React.useState<Patient | undefined>();
   const { id } = useParams<{ id: string }>();
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const iconStyles = { color: '#000000', fontSize: 60 };
 
   React.useEffect(() => {
@@ -82,7 +82,9 @@ const PatientInfoPage = () => {
         occupation: {patient.occupation}
       </p>
       <Typography align="center" variant="h4">
-        Entries
+        {patient.entries?.length
+          ? 'Entries'
+          : 'No entries'}
       </Typography>
       <div>
         {patient.entries?.map((entry) => (
@@ -92,7 +94,9 @@ const PatientInfoPage = () => {
             <i>{entry.description}</i>
             <ul>
               {entry.diagnosisCodes?.map((code) => (
-                <li key={code}>{code}</li>
+                <li key={code}>
+                  {code} – {diagnoses[code] && diagnoses[code].name}
+                </li>
               ))}
             </ul>
             {entryData(entry)}
