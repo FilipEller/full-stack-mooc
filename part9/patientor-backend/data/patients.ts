@@ -24,7 +24,7 @@ const data = [
     dateOfBirth: '1970-04-25',
     ssn: '250470-555L',
     gender: 'male',
-    occupation: 'Technician',
+    occupation: 'Technician'
   },
   {
     id: 'd2773822-f723-11e9-8f0b-362b9e155667',
