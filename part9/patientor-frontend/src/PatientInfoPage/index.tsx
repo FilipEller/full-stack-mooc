@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { apiBaseUrl } from '../constants';
 import { useStateValue, updatePatient } from '../state';
 import axios from 'axios';
-import { Patient, Entry, EntryType } from '../types';
+import { Patient } from '../types';
+import EntryDetails from '../components/EntryDetails';
 
 import { Typography } from '@material-ui/core';
 import FemaleIcon from '@mui/icons-material/Female';
@@ -13,7 +14,7 @@ import TransgenderIcon from '@mui/icons-material/Transgender';
 const PatientInfoPage = () => {
   const [patient, setPatient] = React.useState<Patient | undefined>();
   const { id } = useParams<{ id: string }>();
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
   const iconStyles = { color: '#000000', fontSize: 60 };
 
   React.useEffect(() => {
@@ -45,25 +46,6 @@ const PatientInfoPage = () => {
     return <div>No patient with id {id}.</div>;
   }
 
-  const entryData = (entry: Entry) => {
-    const assertNever = (value: never): never => {
-      throw new Error(
-        `Unhandled discriminated union member: ${JSON.stringify(value)}`
-      );
-    };
-
-    switch (entry.type) {
-      case EntryType.Hospital:
-        return <></>;
-      case EntryType.OccupationalHealthcare:
-        return <></>;
-      case EntryType.HealthCheck:
-        return <></>;
-      default:
-        return assertNever(entry);
-    }
-  };
-
   return (
     <div>
       <Typography align="center" variant="h3">
@@ -82,25 +64,11 @@ const PatientInfoPage = () => {
         occupation: {patient.occupation}
       </p>
       <Typography align="center" variant="h4">
-        {patient.entries?.length
-          ? 'Entries'
-          : 'No entries'}
+        {patient.entries?.length ? 'Entries' : 'No entries'}
       </Typography>
       <div>
         {patient.entries?.map((entry) => (
-          <div key={entry.id}>
-            {entry.date} – {entry.specialist}
-            <br />
-            <i>{entry.description}</i>
-            <ul>
-              {entry.diagnosisCodes?.map((code) => (
-                <li key={code}>
-                  {code} – {diagnoses[code] && diagnoses[code].name}
-                </li>
-              ))}
-            </ul>
-            {entryData(entry)}
-          </div>
+          <EntryDetails entry={entry} key={entry.id} />
         ))}
       </div>
     </div>
