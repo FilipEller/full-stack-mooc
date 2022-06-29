@@ -84,11 +84,15 @@ export const AddEntryForm = ({
       setPatient(newPatient);
       resetForm();
     } catch (e: unknown) {
+      console.log('Oopsie, error.', e);
       if (axios.isAxiosError(e)) {
-        console.error(e?.response?.data || 'Unrecognized axios error');
+        console.error('Axios error', e?.response?.data || 'Unrecognized axios error');
         setError(
           String(e?.response?.data?.error) || 'Unrecognized axios error'
         );
+      } else if (e instanceof Error) {
+        console.log('Non-axios error', e?.message);
+        setError(e?.message);
       } else {
         console.error('Unknown error', e);
         setError('Unknown error');
