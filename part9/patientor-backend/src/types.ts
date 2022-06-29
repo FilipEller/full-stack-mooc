@@ -35,14 +35,12 @@ export type NewPatientFields = {
   ssn: unknown;
   gender: unknown;
   occupation: unknown;
-  entries: unknown;
 };
 
 export interface BaseEntry {
   id: string;
-  type: string;
   description: string;
-  date: string;
+  date: Date;
   specialist: string;
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
@@ -80,3 +78,21 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
+export type NewEntry = UnionOmit<Entry, 'id'>;
+
+export type NewEntryFields = {
+  type: unknown;
+  description: unknown;
+  date: unknown;
+  specialist: unknown;
+  diagnosisCodes: unknown;
+  healthCheckRating: unknown;
+  employerName: unknown;
+  sickLeave: unknown;
+  discharge: unknown;
+};
