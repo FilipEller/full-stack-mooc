@@ -5,6 +5,7 @@ import { useStateValue, updatePatient } from '../state';
 import axios from 'axios';
 import { Patient } from '../types';
 import EntryDetails from '../components/EntryDetails';
+import AddEntryForm from '../components/AddEntryForm';
 
 import { Typography } from '@material-ui/core';
 import FemaleIcon from '@mui/icons-material/Female';
@@ -26,7 +27,6 @@ const PatientInfoPage = () => {
           const { data } = await axios.get<Patient>(
             `${apiBaseUrl}/patients/${id}`
           );
-          console.log(data);
           dispatch(updatePatient(data));
           setPatient(data);
         } catch (e) {
@@ -37,7 +37,7 @@ const PatientInfoPage = () => {
         void fetchPatientInfo();
       }
     }
-  }, [dispatch]);
+  }, [dispatch, patients]);
 
   if (!id) {
     return <div>Something went wrong.</div>;
@@ -63,13 +63,16 @@ const PatientInfoPage = () => {
         <br />
         occupation: {patient.occupation}
       </p>
-      <Typography align="center" variant="h4">
-        {patient.entries?.length ? 'Entries' : 'No entries'}
-      </Typography>
       <div>
+        <Typography align="center" variant="h4">
+          {patient.entries?.length ? 'Entries' : 'No entries'}
+        </Typography>
         {patient.entries?.map((entry) => (
           <EntryDetails entry={entry} key={entry.id} />
         ))}
+      </div>
+      <div>
+        <AddEntryForm patient={patient} setPatient={setPatient} />
       </div>
     </div>
   );
