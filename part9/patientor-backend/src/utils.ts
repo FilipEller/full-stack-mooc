@@ -76,6 +76,13 @@ export const isGender = (value: any): value is Gender => {
   return Object.values(Gender).includes(value);
 };
 
+/*
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isNewEntry = (entry: any): entry is NewEntry => {
+  return true;
+};
+*/
+
 const parseDate = (date: unknown): Date => {
   if (!date || !isString(date) || !isDate(date)) {
     throw new Error(`Incorrect or missing date: ${date}`);
@@ -120,7 +127,7 @@ const parseDischarge = ({
 }: {
   date: unknown;
   criteria: unknown;
-}) => {
+}): { date: Date; criteria: string } => {
   if (
     !date ||
     !criteria ||
@@ -141,9 +148,9 @@ const parseSickLeave = ({
 }: {
   startDate: unknown;
   endDate: unknown;
-}) => {
+}): { startDate: Date; endDate: Date } | undefined => {
   if (!startDate && !endDate) {
-    return {};
+    return undefined;
   }
   if (
     !startDate ||
@@ -239,20 +246,24 @@ export const toNewEntry = ({
         return {
           type: 'Hospital',
           discharge: parseDischarge(discharge as any), // eslint-disable-line
-        };
+        } as const;
       case 'HealthCheck':
         return {
           type: 'HealthCheck',
           healthCheckRating: parseRating(healthCheckRating),
-        };
+        } as const;
       case 'OccupationalHealthcare':
-        return {
+        const parsedSickLeave = parseSickLeave(sickLeave as any); // eslint-disable-line
+        const required = {
           type: 'OccupationalHealthcare',
           employerName: parseString(employerName, 'employer name'),
-          sickLeave: parseSickLeave(sickLeave as any), // eslint-disable-line
-        };
+        } as const;
+        if (parsedSickLeave) {
+          return { ...required, ...parsedSickLeave };
+        }
+        return required;
       default:
-        throw new Error(`Incorrect type: ${type}`);
+        throw new Error(`Invalid type: ${type}`);
     }
   };
 
@@ -260,5 +271,6 @@ export const toNewEntry = ({
     ...base,
     ...typeSpecific(parseString(type, 'type')),
   };
-  return newEntry as NewEntry;
+
+  return newEntry;
 };
