@@ -18,6 +18,16 @@ import { Entry, Patient } from '../types';
 import axios from 'axios';
 import { updatePatient } from '../state';
 
+interface FormValues {
+  type: string;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes: string[];
+  dischargeDate: string;
+  criteria: string;
+}
+
 export const AddEntryForm = ({
   patient,
   setPatient,
@@ -31,16 +41,6 @@ export const AddEntryForm = ({
   const FormikSelect = ({ field, ...props }: FieldProps) => (
     <Select {...field} {...props} />
   );
-
-  interface FormValues {
-    type: string;
-    description: string;
-    date: string;
-    specialist: string;
-    diagnosisCodes: string[];
-    dischargeDate: string;
-    criteria: string;
-  }
 
   const entryTypeOptions = [
     { value: 'Hospital', label: 'Hospital' },
@@ -83,10 +83,14 @@ export const AddEntryForm = ({
       dispatch(updatePatient(newPatient));
       setPatient(newPatient);
       resetForm();
+      setError(undefined);
     } catch (e: unknown) {
       console.log('Oopsie, error.', e);
       if (axios.isAxiosError(e)) {
-        console.error('Axios error', e?.response?.data || 'Unrecognized axios error');
+        console.error(
+          'Axios error',
+          e?.response?.data || 'Unrecognized axios error'
+        );
         setError(
           String(e?.response?.data?.error) || 'Unrecognized axios error'
         );
@@ -138,7 +142,7 @@ export const AddEntryForm = ({
         return errors;
       }}
     >
-      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
+      {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
         return (
           <Form className="form ui">
             <Typography align="center" variant="h4">
@@ -181,6 +185,7 @@ export const AddEntryForm = ({
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
               diagnoses={Object.values(diagnoses)}
+              selectedDiagnoses={values.diagnosisCodes}
             />
             <Field
               label="Discharge Date"

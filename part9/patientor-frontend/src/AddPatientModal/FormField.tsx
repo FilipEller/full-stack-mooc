@@ -106,21 +106,17 @@ export const DiagnosisSelection = ({
   diagnoses,
   setFieldValue,
   setFieldTouched,
+  selectedDiagnoses,
 }: {
   diagnoses: Diagnosis[];
   setFieldValue: FormikProps<{ diagnosisCodes: string[] }>['setFieldValue'];
   setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>['setFieldTouched'];
+  selectedDiagnoses: string[];
 }) => {
-  const [selectedDiagnoses, setDiagnoses] = useState<string[]>([]);
   const field = 'diagnosisCodes';
   const onChange = (data: string[]) => {
-    // for whatever reason selectedDiagnoses always
-    // gets the value it should have had before the change
-    // even though data is up-to-date
-    // so selectedDiagnoses lags one change behind
-    setDiagnoses([...data]);
     setFieldTouched(field, true);
-    setFieldValue(field, selectedDiagnoses);
+    setFieldValue(field, data);
   };
 
   const stateOptions = diagnoses.map((diagnosis) => ({
