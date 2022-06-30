@@ -8,8 +8,14 @@ const OccupationalHealthcareEntryDetails = ({
 }) => {
   return (
     <div>
-      <WorkIcon sx={{ color: '#000000' }} />{' '}
-      <i>{entry.employerName}</i>
+      {entry.sickLeave && (
+        <p>
+          Sick leave starting: {entry.sickLeave.startDate}
+          <br/>
+          Sick leave ending: {entry.sickLeave.endDate}
+        </p>
+      )}
+      <WorkIcon sx={{ color: '#000000' }} /> <i>{entry.employerName}</i>
     </div>
   );
 };

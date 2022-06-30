@@ -11,7 +11,11 @@ import {
 } from 'formik';
 import { Select, MenuItem, Typography, InputLabel } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import { TextField, DiagnosisSelection } from '../AddPatientModal/FormField';
+import {
+  TextField,
+  DiagnosisSelection,
+  RatingSelection,
+} from '../AddPatientModal/FormField';
 import { useStateValue } from '../state';
 import { apiBaseUrl } from '../constants';
 import { Entry, Patient } from '../types';
@@ -26,6 +30,10 @@ interface FormValues {
   diagnosisCodes: string[];
   dischargeDate: string;
   criteria: string;
+  healthCheckRating: number;
+  employerName: string;
+  sickLeaveStartDate: string;
+  sickLeaveEndDate: string;
 }
 
 export const AddEntryForm = ({
@@ -61,16 +69,50 @@ export const AddEntryForm = ({
         diagnosisCodes,
         dischargeDate,
         criteria,
+        healthCheckRating,
+        employerName,
+        sickLeaveStartDate,
+        sickLeaveEndDate,
       } = values;
-      const newEntry = {
-        type,
-        description,
-        date,
-        specialist,
-        diagnosisCodes,
-        discharge: { date: dischargeDate, criteria },
+      const getEntry = () => {
+        switch (type) {
+          case 'Hospital':
+            return {
+              type,
+              description,
+              date,
+              specialist,
+              diagnosisCodes,
+              discharge: { date: dischargeDate, criteria },
+            };
+          case 'HealthCheck':
+            return {
+              type,
+              description,
+              date,
+              specialist,
+              diagnosisCodes,
+              healthCheckRating,
+            };
+          case 'OccupationalHealthcare':
+            return {
+              type,
+              description,
+              date,
+              specialist,
+              diagnosisCodes,
+              healthCheckRating,
+              employerName,
+              sickLeave: {
+                startDate: sickLeaveStartDate,
+                endDate: sickLeaveEndDate,
+              },
+            };
+          default:
+            return {};
+        }
       };
-      console.log(diagnosisCodes);
+      const newEntry = getEntry();
       const { data } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${patient.id}/entries`,
         newEntry
@@ -112,6 +154,10 @@ export const AddEntryForm = ({
     diagnosisCodes: [],
     dischargeDate: '',
     criteria: '',
+    healthCheckRating: 0,
+    employerName: '',
+    sickLeaveStartDate: '',
+    sickLeaveEndDate: '',
   };
 
   return (
@@ -120,6 +166,7 @@ export const AddEntryForm = ({
       onSubmit={submitNewEntry}
       validate={(values) => {
         const requiredError = 'Field is required';
+        const bothError = 'Both start and end date must be provided, or neither';
         const errors: { [field: string]: string } = {};
         if (!values.type) {
           errors.type = requiredError;
@@ -138,6 +185,18 @@ export const AddEntryForm = ({
         }
         if (values.type === 'Hospital' && !values.criteria) {
           errors.criteria = requiredError;
+        }
+        if (values.type === 'HealthCheck' && !values.healthCheckRating) {
+          errors.healthCheckRating = requiredError;
+        }
+        if (values.type === 'OccupationalHealthcare' && !values.employerName) {
+          errors.employerName = requiredError;
+        }
+        if (values.type === 'OccupationalHealthcare' && values.sickLeaveEndDate && !values.sickLeaveStartDate) {
+          errors.sickLeaveStartDate = bothError;
+        }
+        if (values.type === 'OccupationalHealthcare' && values.sickLeaveStartDate && !values.sickLeaveEndDate) {
+          errors.sickLeaveEndDate = bothError;
         }
         return errors;
       }}
@@ -187,18 +246,51 @@ export const AddEntryForm = ({
               diagnoses={Object.values(diagnoses)}
               selectedDiagnoses={values.diagnosisCodes}
             />
-            <Field
-              label="Discharge Date"
-              placeholder="YYYY-MM-DD"
-              name="dischargeDate"
-              component={TextField}
-            />
-            <Field
-              label="Discharge Criteria"
-              placeholder="Criteria"
-              name="criteria"
-              component={TextField}
-            />
+            {values.type === 'Hospital' && (
+              <>
+                <Field
+                  label="Discharge Date"
+                  placeholder="YYYY-MM-DD"
+                  name="dischargeDate"
+                  component={TextField}
+                />
+                <Field
+                  label="Discharge Criteria"
+                  placeholder="Criteria"
+                  name="criteria"
+                  component={TextField}
+                />
+              </>
+            )}
+            {values.type === 'HealthCheck' && (
+              <RatingSelection
+                setFieldValue={setFieldValue}
+                setFieldTouched={setFieldTouched}
+                selected={values.healthCheckRating}
+              />
+            )}
+            {values.type === 'OccupationalHealthcare' && (
+              <>
+                <Field
+                  label="Employer"
+                  placeholder="Employer"
+                  name="employerName"
+                  component={TextField}
+                />
+                <Field
+                  label="Sick leave starting date"
+                  placeholder="YYYY-MM-DD"
+                  name="sickLeaveStartDate"
+                  component={TextField}
+                />
+                <Field
+                  label="Sick leave ending date"
+                  placeholder="YYYY-MM-DD"
+                  name="sickLeaveEndDate"
+                  component={TextField}
+                />
+              </>
+            )}
             <Button
               fullWidth
               type="submit"

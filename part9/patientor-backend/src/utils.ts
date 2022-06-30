@@ -148,7 +148,7 @@ const parseSickLeave = ({
 }: {
   startDate: unknown;
   endDate: unknown;
-}): { startDate: Date; endDate: Date } | undefined => {
+}): { sickLeave: { startDate: Date; endDate: Date } } | undefined => {
   if (!startDate && !endDate) {
     return undefined;
   }
@@ -164,7 +164,7 @@ const parseSickLeave = ({
       `Incorrect or missing sick leave start or end date: ${startDate}, ${endDate}`
     );
   }
-  return { startDate, endDate };
+  return { sickLeave: { startDate, endDate } };
 };
 
 /*

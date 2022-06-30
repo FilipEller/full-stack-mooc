@@ -7,7 +7,7 @@ import {
   TextField as TextFieldMUI,
   Typography,
 } from '@material-ui/core';
-import { Diagnosis, Gender } from '../types';
+import { Diagnosis, Gender, HealthCheckRating } from '../types';
 import { InputLabel } from '@material-ui/core';
 import Input from '@material-ui/core/Input';
 
@@ -132,6 +132,63 @@ export const DiagnosisSelection = ({
         multiple
         value={selectedDiagnoses}
         onChange={(e) => onChange(e.target.value as string[])}
+        input={<Input />}
+      >
+        {stateOptions.map((option) => (
+          <MenuItem key={option.key} value={option.value}>
+            {option.text}
+          </MenuItem>
+        ))}
+      </Select>
+      <ErrorMessage name={field} />
+    </FormControl>
+  );
+};
+
+export const RatingSelection = ({
+  setFieldValue,
+  setFieldTouched,
+  selected,
+}: {
+  setFieldValue: FormikProps<{ healthCheckRating: number }>['setFieldValue'];
+  setFieldTouched: FormikProps<{ healthCheckRating: number }>['setFieldTouched'];
+  selected: number;
+}) => {
+  const field = 'healthCheckRating';
+  const onChange = (data: number) => {
+    setFieldTouched(field, true);
+    setFieldValue(field, data);
+  };
+
+  const stateOptions = [
+    {
+      key: 0,
+      text: 'Healthy',
+      value: 0,
+    },
+    {
+      key: 1,
+      text: 'Low risk',
+      value: 1,
+    },
+    {
+      key: 2,
+      text: 'High risk',
+      value: 2,
+    },
+    {
+      key: 3,
+      text: 'Critical risk',
+      value: 3,
+    },
+  ];
+
+  return (
+    <FormControl style={{ width: 552, marginBottom: '30px' }}>
+      <InputLabel>Diagnoses</InputLabel>
+      <Select
+        value={selected}
+        onChange={(e) => onChange(e.target.value as number)}
         input={<Input />}
       >
         {stateOptions.map((option) => (

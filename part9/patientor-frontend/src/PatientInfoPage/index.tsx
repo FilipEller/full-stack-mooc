@@ -49,7 +49,6 @@ const PatientInfoPage = () => {
   if (!patient) {
     return <div>No patient with id {id}.</div>;
   }
-
   return (
     <div>
       <Typography align="center" variant="h3">
