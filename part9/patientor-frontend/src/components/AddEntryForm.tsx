@@ -9,16 +9,9 @@ import {
   FieldProps,
   FormikProps, // eslint-disable-line
 } from 'formik';
-import {
-  Select,
-  MenuItem,
-  Typography,
-  InputLabel,
-  FormControl,
-  Input,
-} from '@material-ui/core';
+import { Select, MenuItem, Typography, InputLabel } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import { TextField } from '../AddPatientModal/FormField';
+import { TextField, DiagnosisSelection } from '../AddPatientModal/FormField';
 import { useStateValue } from '../state';
 import { apiBaseUrl } from '../constants';
 import { Entry, Patient } from '../types';
@@ -54,12 +47,6 @@ export const AddEntryForm = ({
     { value: 'HealthCheck', label: 'Health Check' },
     { value: 'OccupationalHealthcare', label: 'Occupational Healthcare' },
   ];
-
-  const diagnosisOptions = Object.values(diagnoses).map((diagnosis) => ({
-    key: diagnosis.code,
-    text: `${diagnosis.name} (${diagnosis.code})`,
-    value: diagnosis.code,
-  }));
 
   const submitNewEntry = async (
     values: FormValues,
@@ -99,10 +86,7 @@ export const AddEntryForm = ({
     } catch (e: unknown) {
       console.log('Oopsie, error.', e);
       if (axios.isAxiosError(e)) {
-        console.error(
-          'Axios error',
-          e?.response?.data || 'Unrecognized axios error'
-        );
+        console.error('Axios error', e?.response?.data || 'Unrecognized axios error');
         setError(
           String(e?.response?.data?.error) || 'Unrecognized axios error'
         );
@@ -154,7 +138,7 @@ export const AddEntryForm = ({
         return errors;
       }}
     >
-      {({ isValid, dirty /*, setFieldValue, setFieldTouched */}) => {
+      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui">
             <Typography align="center" variant="h4">
@@ -193,16 +177,11 @@ export const AddEntryForm = ({
               name="specialist"
               component={TextField}
             />
-            <FormControl style={{ width: 552, marginBottom: '30px' }}>
-              <InputLabel>Diagnoses</InputLabel>
-              <Select multiple input={<Input />}>
-                {diagnosisOptions.map((option) => (
-                  <MenuItem key={option.key} value={option.value}>
-                    {option.text}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <DiagnosisSelection
+              setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
+              diagnoses={Object.values(diagnoses)}
+            />
             <Field
               label="Discharge Date"
               placeholder="YYYY-MM-DD"

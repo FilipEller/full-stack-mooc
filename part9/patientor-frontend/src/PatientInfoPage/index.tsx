@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { apiBaseUrl } from '../constants';
-import { useStateValue, updatePatient } from '../state';
+import { useStateValue, updatePatient, addPatient } from '../state';
 import axios from 'axios';
 import { Patient } from '../types';
 import EntryDetails from '../components/EntryDetails';
@@ -20,21 +20,25 @@ const PatientInfoPage = () => {
 
   React.useEffect(() => {
     if (id) {
-      setPatient(patients[id]);
       const fetchPatientInfo = async () => {
-        console.log('fetching data');
         try {
           const { data } = await axios.get<Patient>(
             `${apiBaseUrl}/patients/${id}`
           );
-          dispatch(updatePatient(data));
           setPatient(data);
+          if (patients[id]) {
+            dispatch(updatePatient(data));
+          } else {
+            dispatch(addPatient(data));
+          }
         } catch (e) {
           console.error(e);
         }
       };
       if (!patient || (patient && !patient.ssn)) {
         void fetchPatientInfo();
+      } else {
+        setPatient(patients[id]);
       }
     }
   }, [dispatch, patients]);
