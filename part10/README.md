@@ -1,0 +1,1 @@
+The exercises of this part are located in the repository "repo-rating-app".
