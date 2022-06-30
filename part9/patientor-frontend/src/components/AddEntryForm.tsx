@@ -1,14 +1,7 @@
 import React from 'react';
 
 import { Button } from '@material-ui/core';
-import {
-  Field,
-  Formik,
-  Form,
-  ErrorMessage, // eslint-disable-line
-  FieldProps,
-  FormikProps, // eslint-disable-line
-} from 'formik';
+import { Field, Formik, Form, FieldProps } from 'formik';
 import { Select, MenuItem, Typography, InputLabel } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import {
@@ -166,7 +159,8 @@ export const AddEntryForm = ({
       onSubmit={submitNewEntry}
       validate={(values) => {
         const requiredError = 'Field is required';
-        const bothError = 'Both start and end date must be provided, or neither';
+        const bothError =
+          'Both start and end date must be provided, or neither';
         const errors: { [field: string]: string } = {};
         if (!values.type) {
           errors.type = requiredError;
@@ -192,10 +186,18 @@ export const AddEntryForm = ({
         if (values.type === 'OccupationalHealthcare' && !values.employerName) {
           errors.employerName = requiredError;
         }
-        if (values.type === 'OccupationalHealthcare' && values.sickLeaveEndDate && !values.sickLeaveStartDate) {
+        if (
+          values.type === 'OccupationalHealthcare' &&
+          values.sickLeaveEndDate &&
+          !values.sickLeaveStartDate
+        ) {
           errors.sickLeaveStartDate = bothError;
         }
-        if (values.type === 'OccupationalHealthcare' && values.sickLeaveStartDate && !values.sickLeaveEndDate) {
+        if (
+          values.type === 'OccupationalHealthcare' &&
+          values.sickLeaveStartDate &&
+          !values.sickLeaveEndDate
+        ) {
           errors.sickLeaveEndDate = bothError;
         }
         return errors;
