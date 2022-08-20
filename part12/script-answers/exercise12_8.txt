@@ -1,0 +1,83 @@
+Script started on 2022-08-19 15:47:47+03:00 [TERM="xterm-256color" TTY="/dev/pts/3" COLUMNS="148" LINES="30"]
+]0;filip@LAPTOP-4JUG8D7J: /mnt/c/Users/filip/Documents/Code/full-stack-open-containers/script-answers[01;32mfilip@LAPTOP-4JUG8D7J[00m:[01;34m/mnt/c/Users/filip/Documents/Code/full-stack-open-containers/script-answers[00m$ docker container ls
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                     NAMES
+8fc81f94f329   nginx     "/docker-entrypoint.…"   11 minutes ago   Up 11 minutes   0.0.0.0:8080->80/tcp      lucid_pike
+299e56ad1365   mongo     "docker-entrypoint.s…"   16 minutes ago   Up 19 seconds   0.0.0.0:3456->27017/tcp   todo-backend_mongo_1
+]0;filip@LAPTOP-4JUG8D7J: /mnt/c/Users/filip/Documents/Code/full-stack-open-containers/script-answers[01;32mfilip@LAPTOP-4JUG8D7J[00m:[01;34m/mnt/c/Users/filip/Documents/Code/full-stack-open-containers/script-answers[00m$ mong[K[K[K[Kdocker exec -it wond[K[K[K[Ktodo-backend_mongo_1 bash
+root@299e56ad1365:/# mongo
+MongoDB shell version v5.0.10
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("f38c367d-56f3-4dec-ac06-67e119399995") }
+MongoDB server version: 5.0.10
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+Welcome to the MongoDB shell.
+For interactive help, type "help".
+For more comprehensive documentation, see
+	https://docs.mongodb.com/
+Questions? Try the MongoDB Developer Community Forums
+	https://community.mongodb.com
+> [3G[J[3G^C
+bye
+root@299e56ad1365:/# mongo -u username -p password
+MongoDB shell version v5.0.10
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("edf75a79-2e08-4711-9bc1-3b07d8578ab5") }
+MongoDB server version: 5.0.10
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting: 
+        2022-08-19T12:48:33.524+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+        2022-08-19T12:48:34.377+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never'
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> show dbs[3G[Jshow dbs[11G
+admin         0.000GB
+config        0.000GB
+local         0.000GB
+the_database  0.000GB
+> use the_database[3G[Juse the_database[19G
+switched to db the_database
+> show collections[3G[Jshow collections[19G
+todos
+> db.todos.find({][3G[Jdb.todos.find({[18G})[3G[Jdb.todos.find({})[20G
+{ "_id" : ObjectId("62ff82c982c183d1c069bb17"), "text" : "Write code", "done" : true }
+{ "_id" : ObjectId("62ff82c982c183d1c069bb18"), "text" : "Learn about containers", "done" : false }
+> db.todos.insertOne({text:[3G[Jdb.todos.insertOne({text[27G[3G[Jdb.todos.insertOne({tex[26G[3G[Jdb.todos.insertOne({te[25G[3G[Jdb.todos.insertOne({t[24G[3G[Jdb.todos.insertOne({[23Gtext:[3G[Jdb.todos.insertOne({text[27G[3G[Jdb.todos.insertOne({tex[26G[3G[Jdb.todos.insertOne({te[25G[3G[Jdb.todos.insertOne({t[24G[3G[Jdb.todos.insertOne({[23G"text": "i[3G[Jdb.todos.insertOne({"text": "[32GIncter[3G[Jdb.todos.insertOne({"text": "Incte[37G[3G[Jdb.todos.insertOne({"text": "Inct[36G[3G[Jdb.todos.insertOne({"text": "Inc[35Grease the number of tools in my toolbelts[3G[Jdb.todos.insertOne({"text": "Increase the number of tools in my toolbelt[75G", "done": false})[3G[Jdb.todos.insertOne({"text": "Increase the number of tools in my toolbelt", "done": false})[93G
+{
+	"acknowledged" : true,
+	"insertedId" : ObjectId("62ff87c4dae439cf5b153d95")
+}
+> [3G[Jdb.todos.insertOne({"text": "Increase the number of tools in my toolbelt", "done": false})[93G[3G[Jdb.todos.find({})[20G[3G[Jdb.todos.find({})[20G
+{ "_id" : ObjectId("62ff82c982c183d1c069bb17"), "text" : "Write code", "done" : true }
+{ "_id" : ObjectId("62ff82c982c183d1c069bb18"), "text" : "Learn about containers", "done" : false }
+{ "_id" : ObjectId("62ff87c4dae439cf5b153d95"), "text" : "Increase the number of tools in my toolbelt", "done" : false }
+> exit[3G[Jexi[6G[3G[Jex[5G[3G[Je[4G[3G[J[3G[3G[J[3G^C
+bye
+root@299e56ad1365:/# exit
+exit
+]0;filip@LAPTOP-4JUG8D7J: /mnt/c/Users/filip/Documents/Code/full-stack-open-containers/script-answers[01;32mfilip@LAPTOP-4JUG8D7J[00m:[01;34m/mnt/c/Users/filip/Documents/Code/full-stack-open-containers/script-answers[00m$ exit
+exit
+
+Script done on 2022-08-19 15:54:53+03:00 [COMMAND_EXIT_CODE="0"]
