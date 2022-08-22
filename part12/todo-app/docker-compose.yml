@@ -2,17 +2,15 @@ version: '3.8'
 
 services:
   app:
-    image: todo-front-dev
-    container_name: todo-front-dev
+    image: todo-front
+    container_name: todo-front
     build:
       context: ./todo-frontend
-      dockerfile: dev.Dockerfile
-    volumes:
-      - ./todo-frontend:/usr/src/app
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
-    environment:
-      REACT_APP_BACKEND_URL: http://localhost:8080/api
+    volumes:
+      - ./todo-frontend/nginx.conf:/etc/nginx/nginx.conf:ro
   mongo:
     image: mongo
     ports:
@@ -32,13 +30,11 @@ services:
     volumes:
       - ./todo-backend/redis_data:/data
   server:
-    image: todo-back-dev
-    container_name: todo-back-dev
+    image: todo-back
+    container_name: todo-back
     build:
       context: ./todo-backend
-      dockerfile: dev.Dockerfile
-    volumes:
-      - ./todo-backend:/usr/src/app
+      dockerfile: Dockerfile
     ports:
       - 3001:3001
     environment:
@@ -57,5 +53,5 @@ services:
     depends_on:
       - app
       - server
-  # busybox:
-    # image: busybox
+  busybox:
+    image: busybox
