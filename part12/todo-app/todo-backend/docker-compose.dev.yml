@@ -19,3 +19,15 @@ services:
     command: redis-server --appendonly yes
     volumes:
       - ./redis_data:/data
+  todo-back-dev:
+    image: todo-back-dev
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 3001:3001
+    environment:
+      MONGO_URL: mongodb://dev_username:dev_password@mongo:27017/the_database
+      REDIS_URL: redis://redis:6379
