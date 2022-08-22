@@ -9,6 +9,8 @@ services:
       - ./todo-frontend:/usr/src/app
     ports:
       - 3000:3000
+    environment:
+      REACT_APP_BACKEND_URL: http://localhost:8080/api
   mongo:
     image: mongo
     ports:
@@ -53,3 +55,5 @@ services:
     depends_on:
       - app
       - server
+  busybox:
+    image: busybox
