@@ -19,8 +19,9 @@ services:
     command: redis-server --appendonly yes
     volumes:
       - ./redis_data:/data
-  todo-back-dev:
+  server:
     image: todo-back-dev
+    container_name: todo-back-dev
     build:
       context: .
       dockerfile: dev.Dockerfile
