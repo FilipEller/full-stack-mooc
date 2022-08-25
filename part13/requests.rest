@@ -1,0 +1,16 @@
+### READ all Blogs
+GET http://localhost:3001/api/blogs
+
+### CREATE Blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "author": "Joe Johnson",
+  "title": "Top 12 people",
+  "url": "https://www.economist.com/",
+  "likes": "193"
+}
+
+### DELETE Blog
+DELETE http://localhost:3001/api/blogs/2
