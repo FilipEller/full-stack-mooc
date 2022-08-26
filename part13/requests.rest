@@ -12,5 +12,16 @@ Content-Type: application/json
   "likes": "193"
 }
 
+###
+PUT http://localhost:3001/api/blogs/1
+Content-Type: application/json
+
+{
+  "author": "Joe Johnson",
+  "title": "Top 12 people",
+  "url": "https://www.economist.com/",
+  "likes": "195"
+}
+
 ### DELETE Blog
 DELETE http://localhost:3001/api/blogs/2
