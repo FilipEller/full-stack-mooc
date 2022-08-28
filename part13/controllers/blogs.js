@@ -4,19 +4,14 @@ const { Blog } = require('../models');
 router.get('/', async (req, res) => {
   const blogs = await Blog.findAll();
   console.log(JSON.stringify(blogs, null, 2));
-  res.json(blogs);
+  res.send(blogs);
 });
 
 router.post('/', async (req, res) => {
   console.log(req.body);
-  try {
-    const { author, title, url, likes } = req.body;
-    const blog = await Blog.create({ author, title, url, likes });
-    return res.json(blog);
-  } catch (e) {
-    console.log('Error:', e);
-    return res.status(400).json({ error: e.message });
-  }
+  const { author, title, url, likes } = req.body;
+  const blog = await Blog.create({ author, title, url, likes });
+  return res.send(blog);
 });
 
 const blogFinder = async (req, res, next) => {
@@ -34,12 +29,12 @@ router.get('/:id', blogFinder, async (req, res) => {
 
 router.put('/:id', blogFinder, async (req, res) => {
   const likes = Number(req.body.likes);
-  if (req.blog && !Number.isNaN(likes)) {
+  if (req.blog) {
     req.blog.likes = likes;
     await req.blog.save();
     res.json({ likes });
   } else {
-    res.status(404).end();
+    return res.status(404).end();
   }
 });
 

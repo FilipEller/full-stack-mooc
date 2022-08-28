@@ -1,13 +1,16 @@
 ### READ all Blogs
 GET http://localhost:3001/api/blogs
 
+### READ one Blog
+GET http://localhost:3001/api/blogs/1
+
 ### CREATE Blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
   "author": "Joe Johnson",
-  "title": "Top 12 people",
+  "title": "Top 16 people",
   "url": "https://www.economist.com/",
   "likes": "193"
 }
@@ -17,10 +20,7 @@ PUT http://localhost:3001/api/blogs/1
 Content-Type: application/json
 
 {
-  "author": "Joe Johnson",
-  "title": "Top 12 people",
-  "url": "https://www.economist.com/",
-  "likes": "195"
+  "likes": "197"
 }
 
 ### DELETE Blog
