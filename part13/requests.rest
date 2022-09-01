@@ -15,7 +15,7 @@ Content-Type: application/json
   "likes": "193"
 }
 
-###
+### UPDATE Blog
 PUT http://localhost:3001/api/blogs/1
 Content-Type: application/json
 
@@ -25,3 +25,26 @@ Content-Type: application/json
 
 ### DELETE Blog
 DELETE http://localhost:3001/api/blogs/2
+
+### READ all Users
+GET http://localhost:3001/api/users
+
+### READ one User
+GET http://localhost:3001/api/users/1
+
+### CREATE User
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "erik",
+  "name": "Erik Erikson"
+}
+
+### UPDATE User
+PUT http://localhost:3001/api/users/erikson
+Content-Type: application/json
+
+{
+  "username": "erik"
+}
