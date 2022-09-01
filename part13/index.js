@@ -23,16 +23,19 @@ const unknownEndpoint = (req, res) => {
 
 app.use(unknownEndpoint);
 
-const errorHandler = (error, req, res) => {
-  console.log('Error:', error.name, error.message);
+const errorHandler = (error, req, res, next) => {
+  console.error('ERROR CAUGHT:', error.name, error.message);
 
   if (error.name === 'SequelizeValidationError') {
-    return res.status(400).send({ error: 'Invalid input, validation error' });
+    return res.status(400).json({ error: error.errors[0].message });
   }
   if (error.name === 'SequelizeDatabaseError') {
-    return res.status(400).send({ error: 'Invalid input, database error' });
+    return res.status(400).send({ error: error.errors[0].message });
   }
-  return res.status(500).send({ error: error.message });
+  if (error.name === 'SequelizeUniqueConstraintError') {
+    return res.status(400).send({ error: error.errors[0].message });
+  }
+  next(error);
 };
 
 app.use(errorHandler);

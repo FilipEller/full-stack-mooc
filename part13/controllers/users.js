@@ -4,17 +4,13 @@ const { User } = require('../models');
 
 router.get('/', async (req, res) => {
   const users = await User.findAll();
-  res.json(users);
+  res.send(users);
 });
 
 router.post('/', async (req, res) => {
-  try {
-    const { username, name } = req.body;
-    const user = await User.create({ username, name });
-    res.send(user);
-  } catch (error) {
-    res.status(400).send({ error });
-  }
+  const { username, name } = req.body;
+  const user = await User.create({ username, name });
+  res.send(user);
 });
 
 router.get('/:id', async (req, res) => {

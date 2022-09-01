@@ -20,7 +20,7 @@ const main = async () => {
       blogs
         .map(
           blog =>
-            `${blog.author || 'Unknown'}: \'${blog.title}\', ${
+            `${blog.author || 'Unknown'}: '${blog.title}', ${
               blog.likes
             } likes`
         )

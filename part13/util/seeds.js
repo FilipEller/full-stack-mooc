@@ -12,3 +12,5 @@ const blogs = [
     url: 'https://medium.com/predict/starlink-is-in-big-trouble-a7798b2c2fe1',
   },
 ];
+
+module.exports = blogs;

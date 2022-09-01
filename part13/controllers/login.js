@@ -5,30 +5,30 @@ const { SECRET } = require('../util/config');
 const User = require('../models/user');
 
 router.post('/', async (req, res) => {
-  const { username, password } = req.body;
+    const { username, password } = req.body;
 
-  const user = await User.findOne({
-    where: {
-      username,
-    },
-  });
-
-  const passwordCorrect = password === 'secret';
-
-  if (!(user && passwordCorrect)) {
-    return res.status(401).json({
-      error: 'invalid username or password',
+    const user = await User.findOne({
+      where: {
+        username,
+      },
     });
-  }
 
-  const userForToken = {
-    username: user.username,
-    id: user.id,
-  };
+    const passwordCorrect = password === 'secret';
 
-  const token = jwt.sign(userForToken, SECRET);
+    if (!(user && passwordCorrect)) {
+      return res.status(401).json({
+        error: 'invalid username or password',
+      });
+    }
 
-  res.status(200).send({ token, username: user.username, name: user.name });
+    const userForToken = {
+      username: user.username,
+      id: user.id,
+    };
+
+    const token = jwt.sign(userForToken, SECRET);
+
+    res.status(200).send({ token, username: user.username, name: user.name });
 });
 
 module.exports = router;
