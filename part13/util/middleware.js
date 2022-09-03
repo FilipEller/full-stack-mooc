@@ -28,7 +28,13 @@ const userExtractor = async (req, res, next) => {
 };
 
 const blogFinder = async (req, res, next) => {
-  req.blog = await Blog.findByPk(req.params.id);
+  req.blog = await Blog.findByPk(req.params.id, {
+    attributes: { exclude: ['userId'] },
+    include: {
+      model: User,
+      attributes: ['name'],
+    },
+  });
   next();
 };
 
