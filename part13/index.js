@@ -27,13 +27,24 @@ const errorHandler = (error, req, res, next) => {
   console.error('ERROR CAUGHT:', error.name, error.message);
 
   if (error.name === 'SequelizeValidationError') {
-    return res.status(400).json({ error: error.errors[0].message });
+    return res.status(400).json({
+      error: error.errors?.length ? error.errors[0].message : error.message,
+    });
   }
   if (error.name === 'SequelizeDatabaseError') {
-    return res.status(400).send({ error: error.errors[0].message });
+    return res.status(400).send({
+      error: error.errors?.length ? error.errors[0].message : error.message,
+    });
   }
   if (error.name === 'SequelizeUniqueConstraintError') {
-    return res.status(400).send({ error: error.errors[0].message });
+    return res.status(400).send({
+      error: error.errors?.length ? error.errors[0].message : error.message,
+    });
+  }
+  if (error.name === 'JsonWebTokenError') {
+    return res.status(400).send({
+      error: error.message,
+    });
   }
   next(error);
 };
