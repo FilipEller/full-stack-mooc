@@ -9,12 +9,14 @@ const {
 } = require('../util/middleware');
 
 router.get('/', async (req, res) => {
-  const where = {}
+  let where = {};
 
   if (req.query.search) {
-    where.title = {
-      [Op.iLike]: `%${req.query.search}%`
-    }
+    const param = { [Op.iLike]: `%${req.query.search}%` };
+    where = {
+      ...where,
+      [Op.or]: [{ title: param }, { author: param }],
+    };
   }
 
   const blogs = await Blog.findAll({
@@ -23,7 +25,7 @@ router.get('/', async (req, res) => {
       model: User,
       attributes: ['name'],
     },
-    where
+    where,
   });
   // console.log(JSON.stringify(blogs, null, 2));
   res.send(blogs);
