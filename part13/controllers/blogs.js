@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Blog } = require('../models');
+const { Blog, User } = require('../models');
 const {
   tokenExtractor,
   userExtractor,
@@ -7,7 +7,13 @@ const {
 } = require('../util/middleware');
 
 router.get('/', async (req, res) => {
-  const blogs = await Blog.findAll();
+  const blogs = await Blog.findAll({
+    attributes: { exclude: ['userId'] },
+    include: {
+      model: User,
+      attributes: ['name'],
+    },
+  });
   console.log(JSON.stringify(blogs, null, 2));
   res.send(blogs);
 });
@@ -15,7 +21,7 @@ router.get('/', async (req, res) => {
 router.post('/', tokenExtractor, userExtractor, async (req, res) => {
   console.log(req.body);
   if (!req.user) {
-    res.status(401).end();
+    return res.status(401).end();
   }
   const { author, title, url, likes } = req.body;
   const { id: userId } = req.user;
@@ -48,11 +54,25 @@ router.put('/:id', blogFinder, async (req, res) => {
   }
 });
 
-router.delete('/:id', blogFinder, async (req, res) => {
-  if (req.blog) {
-    await req.blog.destroy();
+router.delete(
+  '/:id',
+  tokenExtractor,
+  userExtractor,
+  blogFinder,
+  async (req, res) => {
+    if (!req.user) {
+      return res.status(401).end();
+    }
+    console.log('user', req.user)
+    console.log('blog', req.blog)
+    if (req.user.id !== req.blog?.userId) {
+      return res.status(403).end();
+    }
+    if (req.blog) {
+      await req.blog.destroy();
+    }
+    return res.status(200).end();
   }
-  return res.status(200).end();
-});
+);
 
 module.exports = router;

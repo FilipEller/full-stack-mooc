@@ -11,7 +11,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVya
 
 {
   "author": "Joe Johnson",
-  "title": "Top 16 people",
+  "title": "Top 10 people",
   "url": "https://www.economist.com/",
   "likes": "193"
 }
@@ -25,7 +25,10 @@ Content-Type: application/json
 }
 
 ### DELETE Blog
-DELETE http://localhost:3001/api/blogs/2
+DELETE http://localhost:3001/api/blogs/1
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVyaWsiLCJpZCI6MSwiaWF0IjoxNjYyMjAzMTI5fQ.I47eq33aezwM_7ld_fa2b4kLJfOBTPtg8nEGrh-iX5U
+
 
 ### READ all Users
 GET http://localhost:3001/api/users
@@ -55,6 +58,6 @@ POST http://localhost:3001/api/login
 Content-Type: application/json
 
 {
-  "username": "erik@gmail.com",
+  "username": "erik",
   "password": "secret"
 }
