@@ -7,13 +7,14 @@ GET http://localhost:3001/api/blogs/1
 ### CREATE Blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVyaWtAZ21haWwuY29tIiwiaWQiOjEsImlhdCI6MTY2MjY1ODU5Mn0.afQ9-vn4i0_dvI505mK_gqfIDQUU5t4wL_IIrn1rXLE
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVyaWtAZ21haWwuY29tIiwiaWQiOjEsImlhdCI6MTY2MjY2MTMzNn0.75x65v1m5hwgVqrYJ0SpG0cAkhnQMSPkcsEFM2TXsro
 
 {
   "author": "Joe Johnson",
-  "title": "Top 10 people",
+  "title": "Top 11 people",
   "url": "https://www.economist.com/",
-  "likes": "193"
+  "likes": "193",
+  "year": 1998
 }
 
 ### UPDATE Blog

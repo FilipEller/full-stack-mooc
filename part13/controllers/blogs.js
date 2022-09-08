@@ -37,7 +37,7 @@ router.post('/', tokenExtractor, userExtractor, async (req, res) => {
   if (!req.user) {
     return res.status(401).end();
   }
-  const { author, title, url, likes } = req.body;
+  const { author, title, url, likes, year } = req.body;
   const { id: userId } = req.user;
   const blog = await Blog.create({
     author,
@@ -45,6 +45,7 @@ router.post('/', tokenExtractor, userExtractor, async (req, res) => {
     url,
     likes,
     userId,
+    year,
   });
   return res.send(blog);
 });
