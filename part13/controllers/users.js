@@ -19,16 +19,10 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  let where = {};
+  const readingStatusFilter = {};
 
-  if (typeof req.query.read === 'boolean') {
-    console.log('read was boolean');
-    where = {
-      ...where,
-      reading: {
-        read: req.query.read,
-      },
-    };
+  if (req.query.read) {
+    readingStatusFilter.read = req.query.read === 'true';
   }
 
   const user = await User.findByPk(req.params.id, {
@@ -43,8 +37,8 @@ router.get('/:id', async (req, res) => {
         attributes: { exclude: ['userId'] },
         through: {
           attributes: ['id', 'read'],
+          where: readingStatusFilter,
         },
-        where,
       },
     ],
   });
