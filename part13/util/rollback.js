@@ -1,3 +1,8 @@
 const { rollbackMigration } = require('./db');
 
-rollbackMigration();
+const main = async () => {
+  await rollbackMigration();
+  process.exit(0);
+};
+
+main()

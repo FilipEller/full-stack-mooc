@@ -62,3 +62,12 @@ Content-Type: application/json
   "username": "erik@gmail.com",
   "password": "secret"
 }
+
+### CREATE Reading
+POST http://localhost:3001/api/readinglists
+Content-Type: application/json
+
+{
+  "blogId": 1,
+  "userId": 1
+}
