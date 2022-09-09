@@ -71,3 +71,12 @@ Content-Type: application/json
   "blogId": 2,
   "userId": 1
 }
+
+### UPDATE Readding
+PUT http://localhost:3001/api/readinglists/1
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVyaWtAZ21haWwuY29tIiwiaWQiOjEsImlhdCI6MTY2MjY2MTMzNn0.75x65v1m5hwgVqrYJ0SpG0cAkhnQMSPkcsEFM2TXsro
+
+{
+  "read": false
+}
